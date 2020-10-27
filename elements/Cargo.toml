@@ -1,0 +1,13 @@
+[package]
+authors = ["Guillem Cordoba <guillem.cordoba@gmail.com>"]
+edition = "2018"
+name = "elements"
+version = "0.1.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+hdk3 = {git = "https://github.com/holochain/holochain", branch = "develop", package = "hdk3"}
+holochain_types = {git = "https://github.com/holochain/holochain", branch = "develop", package = "holochain_types"}
+holochain_zome_types = {git = "https://github.com/holochain/holochain", branch = "develop", package = "holochain_zome_types"}
+fixt = {git = "https://github.com/holochain/holochain", branch = "develop", package = "fixt"}
