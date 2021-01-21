@@ -1,0 +1,10 @@
+{
+  "name": "paths_exercise",
+  "uuid": "",
+  "properties": null,
+  "zomes": {
+    "paths_exercise": {
+      "wasm_path": "../target/wasm32-unknown-unknown/release/paths_exercise.wasm"
+    }
+  }
+}
