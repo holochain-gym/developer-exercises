@@ -1,4 +1,5 @@
 use hdk3::prelude::*;
+use chrono::{DateTime, Datelike, NaiveDateTime, Timelike, Utc};
 
 entry_defs![Path::entry_def(), Post::entry_def()];
 
@@ -43,4 +44,16 @@ pub struct GetPostsByTagInput(String);
 #[hdk_extern]
 pub fn get_posts_by_tag(input: GetPostsByTagInput) -> ExternResult<GetPostsOutput> {
     unimplemented!()
+}
+
+/** Helper functions */
+
+fn now_date_time() -> ExternResult<DateTime<Utc>> {
+    let time = sys_time()?;
+
+    let secs = time.as_secs();
+
+    let date: DateTime<Utc> =
+        DateTime::from_utc(NaiveDateTime::from_timestamp(secs as i64, 0), Utc);
+    Ok(date)
 }
