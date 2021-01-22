@@ -8,6 +8,8 @@
 - Code all `unimplemented!()` functions.
 - Compile and run the tests, and check that all tests are passing.
 
+---
+
 ### Requirements
 
 - Having run through [holochain RSM installation](https://github.com/holochain/holochain-dna-build-tutorial), with `holochain` and `dna-util` already installed
@@ -20,8 +22,6 @@ dna-util -c paths_exercise.dna.workdir/
 ```
 
 ### Testing
-
-After having built the DNA:
 
 ```bash
 cd test
