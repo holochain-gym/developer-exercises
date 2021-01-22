@@ -51,7 +51,7 @@ orchestrator.registerScenario(
       "get_all_tags",
       null
     );
-    t.deepEqual(all_tags, ["nature", "giraffe"]);
+    t.deepEqual(all_tags, ["movie", "nature", "giraffe"]);
 
     const naturePosts = await alice_common.cells[0].call(
       "paths_exercise",
@@ -90,7 +90,7 @@ orchestrator.registerScenario(
         hour: null,
       }
     );
-    t.deepEqual(postsByTime, ["Inception", "good morning"]);
+    t.deepEqual(postsByTime, ["good morning", "Inception"]);
 
     postsByTime = await alice_common.cells[0].call(
       "paths_exercise",
@@ -114,7 +114,7 @@ orchestrator.registerScenario(
         hour: date.getUTCHours(),
       }
     );
-    t.deepEqual(postsByTime, ["Inception", "good morning"]);
+    t.deepEqual(postsByTime, ["good morning", "Inception"]);
   }
 );
 

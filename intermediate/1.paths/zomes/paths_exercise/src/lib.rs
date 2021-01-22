@@ -12,6 +12,16 @@ pub struct Post(String);
 #[derive(Serialize, Deserialize, Clone, Debug, SerializedBytes)]
 pub struct GetPostsOutput(Vec<Post>);
 
+fn now_date_time() -> ExternResult<DateTime<Utc>> {
+    let time = sys_time()?;
+
+    let secs = time.as_secs();
+
+    let date: DateTime<Utc> =
+        DateTime::from_utc(NaiveDateTime::from_timestamp(secs as i64, 0), Utc);
+    Ok(date)
+}
+
 #[derive(Serialize, Deserialize, Clone, Debug, SerializedBytes)]
 pub struct CreateTaskInput {
     content: String,
@@ -22,12 +32,7 @@ pub fn create_post(task_input: CreateTaskInput) -> ExternResult<EntryHash> {
     let post = Post(task_input.content);
     create_entry(&post)?;
 
-    let time = sys_time()?;
-
-    let secs = time.as_secs();
-
-    let date: DateTime<Utc> =
-        DateTime::from_utc(NaiveDateTime::from_timestamp(secs as i64, 0), Utc);
+    let date = now_date_time()?;
 
     let post_hash = hash_entry(&post)?;
 
@@ -62,7 +67,7 @@ pub struct GetPostsByTimeInput {
     hour: Option<usize>,
 }
 #[hdk_extern]
-pub fn get_post_by_time(input: GetPostsByTimeInput) -> ExternResult<GetPostsOutput> {
+pub fn get_posts_by_time(input: GetPostsByTimeInput) -> ExternResult<GetPostsOutput> {
     let posts = match input.hour {
         None => get_posts_by_day(input),
         Some(h) => get_posts_by_hour(input.year, input.month, input.day, h),

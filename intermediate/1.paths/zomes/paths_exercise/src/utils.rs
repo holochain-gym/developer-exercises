@@ -1,5 +1,6 @@
 use super::*;
-use hdk3::{hash_path::path::Component};
+use hdk3::hash_path::path::Component;
+use std::convert::TryFrom;
 
 pub fn get_posts_by_day(input: GetPostsByTimeInput) -> ExternResult<Vec<Post>> {
     let path = Path::from(format!(
@@ -58,19 +59,14 @@ pub fn err(reason: &str) -> HdkError {
     HdkError::Wasm(WasmError::Zome(String::from(reason)))
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, SerializedBytes)]
-struct StrComponent(String);
 pub fn get_last_component_string(path_tag: LinkTag) -> ExternResult<String> {
-    let bytes = SerializedBytes::from(UnsafeBytes::from(path_tag.0));
-    let hour_path: Path = bytes.try_into()?;
+    let hour_path = Path::try_from(&path_tag)?;
     let hour_components: Vec<Component> = hour_path.into();
 
-    let hour_bytes: Vec<u8> = hour_components
+    let hour_bytes: &Component = hour_components
         .last()
-        .ok_or(err("Invalid path"))?
-        .clone()
-        .into();
-    let hour_str: StrComponent = SerializedBytes::from(UnsafeBytes::from(hour_bytes)).try_into()?;
+        .ok_or(err("Invalid path"))?;
+    let hour_str: String = hour_bytes.try_into()?;
 
-    Ok(hour_str.0)
+    Ok(hour_str)
 }
