@@ -4,7 +4,7 @@ import path from "path";
 const conductorConfig = Config.gen();
 
 // Construct proper paths for your DNAs
-const commonDna = path.join(__dirname, "../../paths_exercise.dna.gz");
+const pathsExercise = path.join(__dirname, "../../paths_exercise.dna.gz");
 
 // create an InstallAgentsHapps array with your DNAs to tell tryorama what
 // to install into the conductor.
@@ -12,7 +12,7 @@ const installation: InstallAgentsHapps = [
   // agent 0
   [
     // happ 0
-    [commonDna],
+    [pathsExercise],
   ],
 ];
 
