@@ -1,4 +1,3 @@
-use crate::*;
 
 /** Tests: DO NOT MODIFY */
 #[cfg(test)]
@@ -6,7 +5,7 @@ mod tests {
     use holochain_types::fixt::*;
     extern crate fixt;
 
-    use super::*;
+    use crate::*;
 
     #[test]
     fn header_address() {
