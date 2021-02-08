@@ -1,7 +1,7 @@
 use hdk3::prelude::*;
 mod tests;
 
-// Gym exercise: http://holochain-gym.github.io/developers/beginner/elements/
+// Gym Exercise: http://holochain-gym.github.io/developers/beginner/elements/
 
 // Returns the header hash from the element
 pub fn get_header_hash(element: Element) -> HeaderHash {
