@@ -1,26 +1,15 @@
 use hdk3::prelude::*;
 use chrono::{DateTime, Datelike, NaiveDateTime, Timelike, Utc};
 
+mod utils;
+use utils::*;
+
 entry_defs![Path::entry_def(), Post::entry_def()];
 
 #[hdk_entry(id = "post")]
-#[derive(Clone, Debug)]
 pub struct Post(String);
 
-#[derive(Serialize, Deserialize, Clone, Debug, SerializedBytes)]
-pub struct GetPostsOutput(Vec<Post>);
-
-fn now_date_time() -> ExternResult<DateTime<Utc>> {
-    let time = sys_time()?;
-
-    let secs = time.as_secs();
-
-    let date: DateTime<Utc> =
-        DateTime::from_utc(NaiveDateTime::from_timestamp(secs as i64, 0), Utc);
-    Ok(date)
-}
-
-#[derive(Serialize, Deserialize, Clone, Debug, SerializedBytes)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct CreateTaskInput {
     content: String,
     tags: Vec<String>,
@@ -57,7 +46,7 @@ pub fn create_post(task_input: CreateTaskInput) -> ExternResult<EntryHash> {
     Ok(post_hash)
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, SerializedBytes)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct GetPostsByTimeInput {
     year: usize,
     month: usize,
@@ -65,19 +54,17 @@ pub struct GetPostsByTimeInput {
     hour: Option<usize>,
 }
 #[hdk_extern]
-pub fn get_posts_by_time(input: GetPostsByTimeInput) -> ExternResult<GetPostsOutput> {
+pub fn get_posts_by_time(input: GetPostsByTimeInput) -> ExternResult<Vec<Post>> {
     let posts = match input.hour {
         None => get_posts_by_day(input),
         Some(h) => get_posts_by_hour(input.year, input.month, input.day, h),
     }?;
 
-    Ok(GetPostsOutput(posts))
+    Ok(posts)
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, SerializedBytes)]
-pub struct GetTagsOutput(Vec<String>);
 #[hdk_extern]
-pub fn get_all_tags(_: ()) -> ExternResult<GetTagsOutput> {
+pub fn get_all_tags(_: ()) -> ExternResult<Vec<String>> {
     let path = Path::from("all_tags");
 
     let links = path.children()?;
@@ -88,14 +75,12 @@ pub fn get_all_tags(_: ()) -> ExternResult<GetTagsOutput> {
         .map(|child_link| get_last_component_string(child_link.tag))
         .collect::<ExternResult<Vec<String>>>()?;
 
-    Ok(GetTagsOutput(tags))
+    Ok(tags)
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, SerializedBytes)]
-pub struct GetPostsByTagInput(String);
 #[hdk_extern]
-pub fn get_posts_by_tag(input: GetPostsByTagInput) -> ExternResult<GetPostsOutput> {
-    let path = Path::from(format!("all_tags.{}", input.0));
+pub fn get_posts_by_tag(tag: String) -> ExternResult<Vec<Post>> {
+    let path = Path::from(format!("all_tags.{}", tag));
 
     let links = get_links(path.hash()?, None)?;
 
@@ -105,7 +90,7 @@ pub fn get_posts_by_tag(input: GetPostsByTagInput) -> ExternResult<GetPostsOutpu
         .map(|link| get_post_by_hash(link.target))
         .collect::<ExternResult<Vec<Post>>>()?;
 
-    Ok(GetPostsOutput(posts))
+    Ok(posts)
 }
 
 /** Helper functions */

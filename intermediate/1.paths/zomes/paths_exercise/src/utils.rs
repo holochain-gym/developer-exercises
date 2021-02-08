@@ -55,8 +55,8 @@ pub fn get_post_by_hash(post_hash: EntryHash) -> ExternResult<Post> {
     post.ok_or(err("Could not convert post"))
 }
 
-pub fn err(reason: &str) -> HdkError {
-    HdkError::Wasm(WasmError::Zome(String::from(reason)))
+pub fn err(reason: &str) -> WasmError {
+    WasmError::Zome(String::from(reason))
 }
 
 pub fn get_last_component_string(path_tag: LinkTag) -> ExternResult<String> {
