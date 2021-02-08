@@ -4,13 +4,9 @@ use chrono::{DateTime, Datelike, NaiveDateTime, Timelike, Utc};
 entry_defs![Path::entry_def(), Post::entry_def()];
 
 #[hdk_entry(id = "post")]
-#[derive(Clone, Debug)]
 pub struct Post(String);
 
-#[derive(Serialize, Deserialize, Clone, Debug, SerializedBytes)]
-pub struct GetPostsOutput(Vec<Post>);
-
-#[derive(Serialize, Deserialize, Clone, Debug, SerializedBytes)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct CreateTaskInput {
     content: String,
     tags: Vec<String>,
@@ -20,7 +16,7 @@ pub fn create_post(task_input: CreateTaskInput) -> ExternResult<EntryHash> {
     unimplemented!()
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, SerializedBytes)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct GetPostsByTimeInput {
     year: usize,
     month: usize,
@@ -28,21 +24,17 @@ pub struct GetPostsByTimeInput {
     hour: Option<usize>,
 }
 #[hdk_extern]
-pub fn get_post_by_time(input: GetPostsByTimeInput) -> ExternResult<GetPostsOutput> {
+pub fn get_post_by_time(input: GetPostsByTimeInput) -> ExternResult<Vec<Post>> {
     unimplemented!()
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, SerializedBytes)]
-pub struct GetTagsOutput(Vec<String>);
 #[hdk_extern]
-pub fn get_all_tags(_: ()) -> ExternResult<GetTagsOutput> {
+pub fn get_all_tags(_: ()) -> ExternResult<Vec<String>> {
     unimplemented!()
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug, SerializedBytes)]
-pub struct GetPostsByTagInput(String);
 #[hdk_extern]
-pub fn get_posts_by_tag(input: GetPostsByTagInput) -> ExternResult<GetPostsOutput> {
+pub fn get_posts_by_tag(tag: String) -> ExternResult<Vec<Post>> {
     unimplemented!()
 }
 
