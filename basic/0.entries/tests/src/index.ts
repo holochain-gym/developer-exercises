@@ -1,4 +1,5 @@
 import { Orchestrator, Config, InstallAgentsHapps } from "@holochain/tryorama";
+import path from "path";
 
 const conductorConfig = Config.gen();
 
