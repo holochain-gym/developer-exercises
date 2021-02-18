@@ -16,13 +16,6 @@
    # branch, tag, commit, etc.
    ref = "master";
 
-   # the sha of what is downloaded from the above ref
-   # note: even if you change the above ref it will not be redownloaded until
-   #       the sha here changes (the sha is the cache key for downloads)
-   # note: to get a new sha, get nix to try and download a bad sha
-   #       it will complain and tell you the right sha
-   sha256 = "032b2bmrijc7knpx3v5hi3j8zhgl4q5d942vnhzf49cbyb5dasq7";
-
    # the github owner of the holonix repo
    owner = "holochain";
 
@@ -75,13 +68,6 @@ echo "<your publishing script here>"
    # branch, tag, commit, etc.
    ref = "pr/holochain-bin-group";
 
-   # the sha of what is downloaded from the above ref
-   # note: even if you change the above ref it will not be redownloaded until
-   #       the sha here changes (the sha is the cache key for downloads)
-   # note: to get a new sha, get nix to try and download a bad sha
-   #       it will complain and tell you the right sha
-   sha256 = "0q5f98swng1n28w7ah3q8kjpdzzardvzmgq0qsli173kg2ii6hqd";
-
    # the github owner of the holonix repo
    owner = "Holo-Host";
 
@@ -100,7 +86,7 @@ echo "<your publishing script here>"
      if use-github
      then builtins.fetchTarball (with github; {
         url = "https://github.com/${owner}/${repo}/archive/${ref}.tar.gz";
-        inherit sha256; }
+         }
        )
      else local.path
     ) {}
