@@ -1,0 +1,2 @@
+#!/bin/bash
+dna-util -c paths_exercise.dna.workdir && cd tests/ && npm install && npm test && cd ..
