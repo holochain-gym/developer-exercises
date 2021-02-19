@@ -1,3 +1,5 @@
 target/
 .cargo
 developer-exercises.code-workspace
+**/paths_exercise.dna.gz
+**/exercise.dna.gz
