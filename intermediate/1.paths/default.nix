@@ -17,14 +17,12 @@ let
  ) { 
    config = config;
 
-   holochainVersionId = "develop";
+   holochainVersionId = "custom";
    
    holochainVersion = { 
-    version = "custom";
-    rev = "8c62cb5888f491f0dd8e6fdf13b6f3991f85a9a";  
-    sha256 = "065kkmmr835ngjqpr7amd7l4dcakj2njx168qvr5z47s9xbgw";  
-    cargoSha256 = "1ix82hlizjsmx8xaaxknbl0wkyck3kc98sp5alav8ln4wf46s";
-    otherDeps = [ "lair-keystore" ];
+    rev = "8c62cb5888f491f08e6fdf13b6f3991f85a9801a";  
+    sha256 = "1kgxyfrwmga27mqywhivn0xdi6br90bavqvnd4kbrfyzbzmf8fcr";  
+    cargoSha256 = "1ix8ihlizjsmx8xaaxknbl0wkyck3kc98spipx5alav8ln4wf46s";
    };
  };
  # END HOLONIX IMPORT BOILERPLATE
