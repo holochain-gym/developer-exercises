@@ -3,8 +3,8 @@
  buildInputs = [ ];
 
  # configure holonix itself
- holonix = {
-  
+ holonix = rec {
+
   # true = use a github repository as the holonix base (recommended)
   # false = use a local copy of holonix (useful for debugging)
   use-github = true;
@@ -14,7 +14,7 @@
 
    # can be any github ref
    # branch, tag, commit, etc.
-   ref = "master";
+   ref = "pr/bump-holo-nixpkgs-add-hc";
 
    # the github owner of the holonix repo
    owner = "holochain";
@@ -26,70 +26,19 @@
   # configuration for when use-github = false
   local = {
    # the path to the local holonix copy
-   path = ./.;
+   path = ../holonix;
   };
 
- };
-
- release = {
-  commit = "________________________________________";
-  version = {
-   current = "_._._";
-   previous = "_._._";
+  config = {
+    includeHolochainBinaries = true;
   };
 
-  hook = {
-   preflight = ''
-echo "<your preflight script here>"
-   '';
-   version = ''
-echo "<your versioning script here>"
-   '';
-   publish = ''
-echo "<your publishing script here>"
-   '';
-  };
-
-  github = {
-   owner = "<your github owner here>";
-   repo = "<your repo name here>";
-   template = ''
-   {{ changelog }}
-   <your release template markdown here>
-   '';
-  };
- };
-
- holo-nixpkgs = rec {
-  use-github = true;
-
-  github = rec {
-   # can be any github ref
-   # branch, tag, commit, etc.
-   ref = "pr/holochain-bin-group";
-
-   # the github owner of the holonix repo
-   owner = "Holo-Host";
-
-   # the name of the holonix repo
-   repo = "holo-nixpkgs";
-
-  };
-
-  # configuration for when use-github = false
-  local = {
-   # the path to the local holonix copy
-   path = ../holo-nixpkgs;
-  };
-
-  importFn = _: import (
+  importFn = args: import (
      if use-github
      then builtins.fetchTarball (with github; {
         url = "https://github.com/${owner}/${repo}/archive/${ref}.tar.gz";
-         }
-       )
+       })
      else local.path
-    ) {}
-    ;
+     ) config // args;
  };
 }
