@@ -13,5 +13,5 @@ derive_more = "0"
 serde = "1"
 
 hc_utils = "0"
-hdk = "0"
+hdk = "0.0.100"
 chrono = "0.4.19"

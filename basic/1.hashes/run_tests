@@ -1,2 +1,2 @@
 #!/bin/bash
-dna-util -c exercise.dna.workdir && cd tests/ && npm install && npm test && cd ..
+hc dna pack workdir && cd tests/ && npm install && npm test && cd ..
