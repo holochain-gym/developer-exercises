@@ -1,5 +1,5 @@
-use hdk3::prelude::*;
-use chrono::{DateTime, Datelike, NaiveDateTime, Timelike, Utc};
+use hdk::prelude::*;
+use chrono::{DateTime, NaiveDateTime, Utc};
 
 entry_defs![Path::entry_def(), Post::entry_def()];
 
