@@ -31,7 +31,7 @@ orchestrator.registerScenario(
     const [[alice_common]] = await alice.installAgentsHapps(installation);
 
     let entryHash = await alice_common.cells[0].call(
-      "paths_exercise",
+      "exercise",
       "create_post",
       {
         content: "good morning",
@@ -39,7 +39,7 @@ orchestrator.registerScenario(
       }
     );
     t.ok(entryHash);
-    await alice_common.cells[0].call("paths_exercise", "create_post", {
+    await alice_common.cells[0].call("exercise", "create_post", {
       content: "Inception",
       tags: ["movie"],
     });
@@ -47,28 +47,28 @@ orchestrator.registerScenario(
     await sleep(500);
 
     const all_tags = await alice_common.cells[0].call(
-      "paths_exercise",
+      "exercise",
       "get_all_tags",
       null
     );
-    t.deepEqual(all_tags, ["nature", "giraffe"]);
+    t.deepEqual(all_tags, ["movie", "nature", "giraffe"]);
 
     const naturePosts = await alice_common.cells[0].call(
-      "paths_exercise",
+      "exercise",
       "get_posts_by_tag",
       "nature"
     );
     t.deepEqual(naturePosts, ["good morning"]);
 
     const moviePosts = await alice_common.cells[0].call(
-      "paths_exercise",
+      "exercise",
       "get_posts_by_tag",
       "movie"
     );
     t.deepEqual(moviePosts, ["Inception"]);
 
     let postsByTime = await alice_common.cells[0].call(
-      "paths_exercise",
+      "exercise",
       "get_posts_by_time",
       {
         year: 0,
@@ -81,7 +81,7 @@ orchestrator.registerScenario(
 
     const date = new Date();
     postsByTime = await alice_common.cells[0].call(
-      "paths_exercise",
+      "exercise",
       "get_posts_by_time",
       {
         year: date.getUTCFullYear(),
@@ -90,10 +90,10 @@ orchestrator.registerScenario(
         hour: null,
       }
     );
-    t.deepEqual(postsByTime, ["Inception", "good morning"]);
+    t.deepEqual(postsByTime, ["good morning", "Inception"]);
 
     postsByTime = await alice_common.cells[0].call(
-      "paths_exercise",
+      "exercise",
       "get_posts_by_time",
       {
         year: date.getUTCFullYear(),
@@ -105,7 +105,7 @@ orchestrator.registerScenario(
     t.deepEqual(postsByTime, []);
 
     postsByTime = await alice_common.cells[0].call(
-      "paths_exercise",
+      "exercise",
       "get_posts_by_time",
       {
         year: date.getUTCFullYear(),
@@ -114,7 +114,7 @@ orchestrator.registerScenario(
         hour: date.getUTCHours(),
       }
     );
-    t.deepEqual(postsByTime, ["Inception", "good morning"]);
+    t.deepEqual(postsByTime, ["good morning", "Inception"]);
   }
 );
 
