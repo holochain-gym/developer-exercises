@@ -4,7 +4,7 @@
 
 ## Exercise
 
-- Open your IDE in [the zome](/intermediate/1.paths/zomes/paths_exercise).
+- Open your IDE in [the zome](/intermediate/1.paths/zomes/exercise).
 - Code all `unimplemented!()` functions.
 - Compile and run the tests, and check that all tests are passing.
 
@@ -22,7 +22,7 @@ This will take some time, but will provide you with the latest RSM binaries. The
 
 ```bash
 CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown
-dna-util -c paths_exercise.dna.workdir/
+hc dna pack workdir
 ```
 
 ### Testing

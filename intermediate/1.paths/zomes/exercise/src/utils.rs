@@ -1,6 +1,6 @@
 use super::*;
-use hdk3::hash_path::path::Component;
 use std::convert::TryFrom;
+use hdk::hash_path::path::Component;
 
 pub fn get_posts_by_day(input: GetPostsByTimeInput) -> ExternResult<Vec<Post>> {
     let path = Path::from(format!(
@@ -56,7 +56,7 @@ pub fn get_post_by_hash(post_hash: EntryHash) -> ExternResult<Post> {
 }
 
 pub fn err(reason: &str) -> WasmError {
-    WasmError::Zome(String::from(reason))
+    WasmError::Guest(String::from(reason))
 }
 
 pub fn get_last_component_string(path_tag: LinkTag) -> ExternResult<String> {

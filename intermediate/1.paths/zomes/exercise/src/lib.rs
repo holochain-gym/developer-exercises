@@ -1,5 +1,5 @@
-use hdk3::prelude::*;
-use chrono::{DateTime, Datelike, NaiveDateTime, Timelike, Utc};
+use hdk::prelude::*;
+use chrono::{DateTime, NaiveDateTime, Timelike, Datelike, Utc};
 
 mod utils;
 use utils::*;
