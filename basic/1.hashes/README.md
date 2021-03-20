@@ -1,6 +1,6 @@
 # Hash Exercise
 
-[Creating entries explained](https://holochain-gym.github.io/developers/basic/1.hashes/)
+[Creating entries explained](https://holochain-gym.github.io/developers/basic/hashes/)
 
 ## Exercise
 
