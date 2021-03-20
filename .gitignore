@@ -1,4 +1,5 @@
 target/
 .cargo
-developer-exercises.code-workspace
+*.code-workspace
 node_modules/
+*.dna
