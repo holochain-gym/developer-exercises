@@ -1,11 +1,11 @@
-# 1. Entries Exercise
+# Hash Exercise
 
-[Creating entries explained](https://holochain-gym.github.io/developers/basic/entries/)
+[Creating entries explained](https://holochain-gym.github.io/developers/basic/1.hashes/)
 
 ## Exercise
 
-- Open your IDE in [the zome](/basic/0.entries/zomes/exercise).
-- Add everything to create entries. Read the [explanation](https://holochain-gym.github.io/developers/basic/entries/) for this.
+- Open your IDE in [the zome](/basic/1.hashes/zomes/exercise).
+- Add everything to create entries. Read the [explanation](https://holochain-gym.github.io/developers/basic/hashes/) for this.
 - Code all `unimplemented!()` functions.
 - Compile and run the tests, and check that the test passes.
 
