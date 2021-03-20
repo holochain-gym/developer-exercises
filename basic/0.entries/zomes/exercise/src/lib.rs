@@ -4,7 +4,7 @@
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct SomeExternalInput {
-    content: String,
+    greeting_text: String,
 }
 
 
