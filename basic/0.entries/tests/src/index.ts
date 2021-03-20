@@ -34,7 +34,7 @@ orchestrator.registerScenario(
       "exercise",
       "say_greeting",
       {
-        content: "Hello World",
+        greeting_text: "Holo, World!",
       }
     );
     t.ok(hash);
