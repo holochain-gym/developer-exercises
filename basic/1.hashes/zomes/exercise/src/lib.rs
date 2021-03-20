@@ -38,5 +38,5 @@ pub fn get_book(hash: WrappedEntryHash) -> ExternResult<Book> {
     let element:Element = get(hash.0, GetOptions::default())?.ok_or(WasmError::Guest(String::from("Could not find book")))?;
     let bookoption: Option<Book> = element.entry().to_app_option()?;
     let book: Book = bookoption.unwrap();
-    Ok(book) //.ok_or(WasmError::Zome(String::from("Could not convert book")))
+    Ok(book)
 }
