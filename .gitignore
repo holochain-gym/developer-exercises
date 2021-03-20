@@ -1,6 +1,5 @@
 target/
 .cargo
-node_modules
-developer-exercises.code-workspace
-**/paths_exercise.dna.gz
-**/exercise.dna.gz
+*.code-workspace
+node_modules/
+*.dna

@@ -23,7 +23,7 @@ The first time this will take several minutes or longer, but will provide you wi
 
 ```bash
 CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown
-dna-util -c exercise.dna.workdir/
+hc dna pack workdir
 ```
 
 ### Testing
