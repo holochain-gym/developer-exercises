@@ -7,11 +7,11 @@ pub struct Greeting(String);
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct SomeExternalInput {
-    content: String,
+    greeting_text: String,
 }
 
 
 pub fn say_greeting(input: SomeExternalInput) -> ExternResult<HeaderHash> {
-    let greeting:Greeting = Greeting(input.content);
+    let greeting:Greeting = Greeting(input.greeting_text);
     create_entry(greeting)
 }
