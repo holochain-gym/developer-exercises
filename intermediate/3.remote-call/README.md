@@ -1,10 +1,10 @@
-# 1. Paths Exercise
+# 3. Remote Call Exercise
 
-[Problem statement](https://holochain-gym.github.io/developers/intermediate/paths/)
+[Problem statement](https://holochain-gym.github.io/developers/intermediate/remote-call/)
 
 ## Exercise
 
-- Open your IDE in [the zome](/intermediate/1.paths/zomes/exercise).
+- Open your IDE in [the zome](/intermediate/3.remote-call/zomes/exercise).
 - Code all `unimplemented!()` functions.
 - Compile and run the tests, and check that all tests are passing.
 
