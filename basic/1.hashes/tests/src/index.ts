@@ -38,20 +38,14 @@ orchestrator.registerScenario(
         content: "A Sovereign Accountable Commons (SAC) is akin to idea of a Decentralized Autonomous Organizations (DAO) on Ethereum but the underlying technology is fundamentally different, as SACs are built on Ceptr and Holochain. http://ceptr.org/projects/sovereign",
       }
     );
-    console.log(JSON.stringify(entryHash)); // trying to understand what I'm getting back from the zome
-    console.log(entryHash);
 
     t.ok(entryHash, "test add book");
 
     let book = await alice_common.cells[0].call(
       "exercise",
       "get_book",
-      entryHash // the return valued is, I believe an array, so I'm guessing this is the right way to serialize is to string
-      // {   // I got confused into thinking you always needed an object
-      //   value: entryHash.toString('hex'),
-      // }
+      entryHash
     );
-    console.log(JSON.stringify(book))
 
     t.ok(book, "test get book"); //
   }
