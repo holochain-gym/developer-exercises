@@ -30,14 +30,14 @@ orchestrator.registerScenario(
     // array structure as you created in your installation array.
     const [[alice_common]] = await alice.installAgentsHapps(installation);
 
-    let entryHash = await alice_common.cells[0].call(
+    let hash = await alice_common.cells[0].call(
       "exercise",
       "say_greeting",
       {
         content: "Hello World",
       }
     );
-    t.ok(entryHash);
+    t.ok(hash);
   }
 );
 
