@@ -1,74 +1,76 @@
 use hdk::link::get_links;
+use hdk::info::agent_info;
 use hdk::prelude::*;
 
-//  1. Declare an entry data type and register it within the macro
+//  1. Declare an entry data type called Post and register it within the macro
 
-entry_defs![EntryData::entry_def()];
+entry_defs![Post::entry_def()];
 
-#[hdk_entry(id = "entrydata")]
-pub struct EntryData(String);
+#[hdk_entry(id = "post")]
+pub struct Post(String);
 
-//  2. Create data structures that can be used to bring in external data
-//    ExternalEntryContentData is designed to contain the App entry data
-//    ExternalEntryHashData is designed to bring in an EntryHash
-//    ExternalLinkData is designed to be used for create_link and get_links, where
-//      base, target and a tag are needed.
+//  2. Create an External Post Data structure:
+//    This structure can take a pair of strings for content and tag data.
+//    As all create_link function calls require a something to be passed into 
+//    the tag option, tag-less posts will need to be passed an empty string --> ''
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct ExternalEntryContentData {
+pub struct ExternalPostData {
     content: String,
+    tag: String
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct ExternalEntryHashData {
-    hash: EntryHash,
+pub struct PostQuery {
+    agent_id: AgentPubKey,
+    tag: String
 }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct ExternalLinkData {
-    base: EntryHash,
-    target: Option<EntryHash>,
-    tag: String,
-}
-
-//  3. The first two functions should be familiar to you:
-//    make_entry_and_hash()
-//      Create an entry from data, hash it and return.
-//    get_entry_from_input()
-//      Given an entry hash, return the contents of the entry
+//  3. create_post()
+//      Create an entry from input data, pass the new entry HeaderHash to the 
+//      link creation call with the base of the link as the agent public key,
+//      and then return the EntryHash of the post
 
 #[hdk_extern]
-pub fn make_entry_and_hash(input: ExternalEntryContentData) -> ExternResult<EntryHash> {
-    let data: EntryData = EntryData(input.content);
-    let _: HeaderHash = create_entry(&data)?;
-    Ok(hash_entry(&data)?)
+pub fn create_post(external_data: ExternalPostData) -> ExternResult<EntryHash> {
+    let post: Post = Post(external_data.content);
+    let _post_header_hash: HeaderHash = create_entry(&post)?;
+    let post_entry_hash: EntryHash = hash_entry(&post)?;
+
+    let _new_link: HeaderHash = create_link(
+        HoloHash::from(agent_info()?.agent_latest_pubkey),
+        post_entry_hash.clone(),
+        LinkTag::new(external_data.tag)
+    )?;
+
+    Ok(post_entry_hash.clone())
 }
 
+//  4. get_posts_for_agent()
+//      Given the AgentPubKey, find all posts with the specified tag and
+//      and return a vector of all the Post structures. Here, we are going to
+//      re-use the structure ExternalPostData
+
 #[hdk_extern]
-pub fn get_entry_from_input(input: ExternalEntryHashData) -> ExternResult<EntryData> {
-    let element: Element = get(input.hash, GetOptions::default())?
-        .ok_or(WasmError::Guest(String::from("Entry not found")))?;
-    let input_entry: Option<EntryData> = element.entry().to_app_option()?;
-    let entry: EntryData = input_entry.unwrap();
+pub fn get_posts_for_agent(post_query: PostQuery) -> ExternResult<Vec<Post>> {
+    let mut content: Vec<Post> = Vec::new();
+
+    let links = get_links(
+        HoloHash::from(post_query.agent_id),
+        Some(LinkTag::new(post_query.tag))
+    ).unwrap();
+
+    for l in links.into_inner() {
+        content.push(_return_content(l).unwrap())
+    }
+
+    Ok(content)
+}
+
+fn _return_content(link: Link) -> ExternResult<Post> {
+    let element: Element = get(link.target, GetOptions::default()).unwrap()
+        .ok_or(WasmError::Guest(String::from("Entry not found"))).unwrap();
+    let entry_option: Option<Post> = element.entry().to_app_option()?;
+    let entry: Post = entry_option.unwrap();
     Ok(entry)
-}
-
-//  4. These are the new functions to examine:
-//    make_links()
-//      A wrapper around create_link that creates a new LinkTag from the input, then creates the link
-//      and returns the header hash of the created link.
-//    find_links()
-//      Given an entry hash of the base + tag ('' or String), return a list of Links
-
-#[hdk_extern]
-pub fn make_links(input: ExternalLinkData) -> ExternResult<HeaderHash> {
-    let new_tag: LinkTag = LinkTag::new(input.tag);
-    let new_link: HeaderHash = create_link(input.base, input.target.unwrap(), new_tag)?;
-    Ok(new_link)
-}
-
-#[hdk_extern]
-pub fn find_links(input: ExternalLinkData) -> ExternResult<Links> {
-    let links: Links = get_links(input.base, Some(LinkTag::new(input.tag)))?;
-    Ok(links)
 }
