@@ -30,106 +30,100 @@ orchestrator.registerScenario(
 
     /**
      * Test Set 1. 
-     * Create three entries with string content, make links between entries 1->2 and 1->3 
-     * with appropriate tags, and then find all links associated with ‘my_tag’, which should 
-     * return a List with 1 entry header target. Passing this target back into the zome yields the 
-     * associated entry content ‘Entry2’.
+     *   3 tests.
+     *   Create two entries and generate links between the agent
+     *     and each entry. Tags are the same for each entry.
+     *   Find length of Vec<Post> when specifying the tags.
      */
 
     let entry_1 = await alice_common.cells[0].call(
       "exercise",
-      "make_entry_and_hash",
-      {content: "Entry1"}
+      "create_post",
+      {
+        content: "This is entry 1",
+        tag: 'tag 1'
+      }
     );
 
     let entry_2 = await alice_common.cells[0].call(
       "exercise",
-      "make_entry_and_hash",
-      {content: "Entry2"}
+      "create_post",
+      {
+        content: "This is entry 2",
+        tag: 'tag 1'
+      }
     );
 
-    let entry_3 = await alice_common.cells[0].call(
+    t.ok(entry_1)
+    t.ok(entry_2)
+
+    let posts = await alice_common.cells[0].call(
       "exercise",
-      "make_entry_and_hash",
-      {content: "Entry3"}
+      "get_posts_for_agent",
+      'tag 1'
     );
 
-    let link_1 = await alice_common.cells[0].call(
-      "exercise",
-      "make_links",
-      {
-        base: entry_1,
-        target: entry_2,
-        tag: 'my_tag',
-      }
-    )
-
-    let link_2 = await alice_common.cells[0].call(
-      "exercise",
-      "make_links",
-      {
-        base: entry_1,
-        target: entry_3,
-        tag: 'another_tag',
-      }
-    )
-  
-    let link_info = await alice_common.cells[0].call(
-      "exercise",
-      "find_links",
-      {
-        base: entry_1,
-        tag: 'my_tag'
-      }
-    )
-
-    let result_target = await alice_common.cells[0].call(
-      "exercise",
-      "get_entry_from_input",
-      {
-        hash: link_info[0].target,
-      }
-    )
-
-    t.ok(link_info.length === 1);
-    t.ok(result_target === 'Entry2');
+    t.ok(posts.length == 2);
 
     /**
      * Test Set 2. 
-     * Using the above entries, find all Links associated for the first entry without a tag filter.
-     * Then, passing in the entry addresses found from both links back into the zome, we
-     * gather the content of entries two and three, which are ‘Entry2’ and ‘Entry3’ respectively.
+     *   3 tests.
+     *   Create a new entry with a different tag.
+     *   Find length of Vec<Post> when specifying the 2 different tags. 
      */
 
-    let link_info_2 = await alice_common.cells[0].call(
+    let entry_3 = await alice_common.cells[0].call(
       "exercise",
-      "find_links",
+      "create_post",
       {
-        base: entry_1,
-        tag: '',
+        content: "This is entry 2",
+        tag: 'tag 2'
       }
-    )
+    );
 
-    let result_target_2a = await alice_common.cells[0].call(
+    t.ok(entry_3);
+
+    let posts_2a = await alice_common.cells[0].call(
       "exercise",
-      "get_entry_from_input",
-      {
-        hash: link_info_2[0].target,
-      }
-    )
+      "get_posts_for_agent",
+      'tag 1'
+    );
 
-    
-    let result_target_2b = await alice_common.cells[0].call(
+    let posts_2b = await alice_common.cells[0].call(
       "exercise",
-      "get_entry_from_input",
-      {
-        hash: link_info_2[1].target,
-      }
-    )
+      "get_posts_for_agent",
+      'tag 2'
+    );
 
-    t.ok(link_info_2.length === 2);
-    t.ok(result_target_2a === 'Entry2');
-    t.ok(result_target_2b === 'Entry3');
+    t.ok(posts_2a.length == 2);
+    t.ok(posts_2b.length == 1);
+
+    /**
+     * Test Set 3. 
+     *   2 tests.
+     *   Create a new entry with no tag.
+     *   Find length of Vec<Post> when specifying no tag.
+     *     When no tag is specified, all posts should be returned (4). 
+     */
+
+     let entry_4 = await alice_common.cells[0].call(
+      "exercise",
+      "create_post",
+      {
+        content: "This is entry 2",
+        tag: ''
+      }
+    );
+
+    t.ok(entry_4);
+
+    let posts_3 = await alice_common.cells[0].call(
+      "exercise",
+      "get_posts_for_agent",
+      ''
+    );
+
+    t.ok(posts_3.length == 4);
 
   }
 );
