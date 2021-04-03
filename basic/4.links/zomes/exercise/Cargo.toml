@@ -1,0 +1,17 @@
+[package]
+authors = ["_Pyramid", "pyramid-songs@protonmail.com"]
+edition = "2018"
+name = "links-exercise"
+version = "0.0.1"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+name = "exercise"
+
+[dependencies]
+derive_more = "0"
+serde = "1"
+
+holo_hash = "0.0.2-alpha"
+hdk = "0.0.100"
+chrono = "0.4.19"
