@@ -37,8 +37,7 @@ orchestrator.registerScenario(
         content: "Hello World",
       }
     );
-    //t.ok(hash);
-    t.equal(true, false);
+    t.ok(hash);
   }
 );
 
