@@ -1,10 +1,10 @@
-# 3. Remote Call Exercise
+# 2. Capability Tokens Exercise
 
-[Problem statement](https://holochain-gym.github.io/developers/intermediate/remote-call/)
+[Problem statement](https://holochain-gym.github.io/developers/intermediate/capability-tokens/)
 
 ## Exercise
 
-- Open your IDE in [the zome](/intermediate/3.remote-call/zomes/exercise).
+- Open your IDE in [the zome](/intermediate/2.capability-tokens/zomes/exercise).
 - Code all `unimplemented!()` functions.
 - Compile and run the tests, and check that all tests are passing.
 
@@ -48,5 +48,9 @@ or if you want to do it manually:
 ```bash
 cd test
 npm install
+<<<<<<< ours:intermediate/2.capability-tokens/README.md
 npm tests
+=======
+npm test
+>>>>>>> theirs:intermediate/3.capability-tokens/README.md
 ```

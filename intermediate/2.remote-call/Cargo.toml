@@ -1,0 +1,14 @@
+[workspace]
+members = [
+  "zomes/exercise",
+]
+
+[profile.dev]
+opt-level = "z"
+
+[profile.release]
+<<<<<<< ours:intermediate/2.capability-tokens/Cargo.toml
+opt-level = "z"
+=======
+opt-level = "z"
+>>>>>>> theirs:intermediate/2.remote-call/Cargo.toml
