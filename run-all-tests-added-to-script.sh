@@ -36,6 +36,22 @@ if [[ ! -z $FAILED ]]; then
 fi
 echo "TESTS PASSED"
 
+# 2.headers
+cd basic/2.headers
+CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown 
+hc dna pack workdir
+cd tests
+npm install &&
+OUTPUT=$(npm test)
+FAILED="$(echo "$OUTPUT" | grep -o '# fail  ')" # expected that zero tests fail
+cd ../../.. #back to base folder
+echo "$OUTPUT" #print output of tests to investigate
+if [[ ! -z $FAILED ]]; then 
+    echo "TESTS FAILED"
+    exit 1 
+fi
+echo "TESTS PASSED"
+
 # 3.elements  --> is just cargo test, no integration test
 cd basic/3.elements
 cargo test
