@@ -91,8 +91,8 @@ if [[ ! -z $FAILED ]]; then
 fi
 echo "TESTS PASSED"
 
-# 2.capability-tokens
-cd intermediate/2.capability-tokens
+# 2.remote-call
+cd intermediate/2.remote-call
 CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown 
 hc dna pack workdir
 cd tests
@@ -107,8 +107,8 @@ if [[ ! -z $FAILED ]]; then
 fi
 echo "TESTS PASSED"
 
-# 3.remote-call
-cd intermediate/3.remote-call
+# 3.capability-tokens
+cd intermediate/3.capability-tokens
 CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown 
 hc dna pack workdir
 cd tests
