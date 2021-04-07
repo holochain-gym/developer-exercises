@@ -7,4 +7,8 @@ members = [
 opt-level = "z"
 
 [profile.release]
+<<<<<<< ours:intermediate/3.remote-call/Cargo.toml
 opt-level = "z"
+=======
+opt-level = "z"
+>>>>>>> theirs:intermediate/3.capability-tokens/Cargo.toml

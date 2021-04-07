@@ -11,15 +11,27 @@
 
 ---
 
-### Building
+### Setup - nix-shell
+IMPORTANT: You need to run these exercises in the correct nix-shell.
+A nix-shell sets up all the right dependencies for the holochain-gym.
 
-First, enter the nix-shell in running this command in this folder:
+In the base folder of this repository, developer-exercises, you will find
+a `default.nix` file. Run the following command in your terminal:
 
 ```bash
 nix-shell
 ```
+The very first time you run this, it will take long time, somewhere between 20 and 80 minutes.
+Because is will download, install and compile everything you need. After that it will only take a second or two to run.
+Then you can build with:
 
-The first time this will take several minutes or longer, but will provide you with the latest RSM binaries. Then you can build with:
+### Building
+
+Use this simple script
+```
+./run_build.sh
+```
+or if you want to do it manually:
 
 ```bash
 CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown
@@ -30,7 +42,7 @@ hc dna pack workdir
 
 Use this simple script
 ```
-./run_tests
+./run_tests.sh
 ```
 or if you want to do it manually:
 

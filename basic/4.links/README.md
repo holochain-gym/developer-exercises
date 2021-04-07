@@ -1,12 +1,10 @@
-# 1. Paths Exercise
+# Links Exercise
 
-[Problem statement](https://holochain-gym.github.io/developers/intermediate/paths/)
+[Working with links](https://holochain-gym.github.io/developers/basic/links/)
 
-## Exercise
+## To-Do
 
-- Open your IDE in [the zome](/intermediate/1.paths/zomes/exercise).
-- Code all `unimplemented!()` functions.
-- Compile and run the tests, and check that all tests are passing.
+Implement challenge test for the end of the chapter
 
 ---
 
