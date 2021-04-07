@@ -13,7 +13,7 @@
 
 ### Building
 
-First, enter the nix-shell in running this command in this folder:
+If you are not in the nix-shell of this repository, enter it by running this command in the root folder of the repository:
 
 ```bash
 nix-shell
