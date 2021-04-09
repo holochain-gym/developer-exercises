@@ -7,7 +7,7 @@ entry_defs![SnackingLog::entry_def()];
 #[hdk_entry(id = "SnackingLog")]
 pub struct SnackingLog(String);
 
-#[hdk_entry(id = "headerAndEntryHash")]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct HeaderAndEntryHash{
     entry_hash: EntryHashB64,
     header_hash: HeaderHashB64
