@@ -10,6 +10,8 @@
 
 ---
 
+---
+
 ### Setup - nix-shell
 IMPORTANT: You need to run these exercises in the correct nix-shell.
 A nix-shell sets up all the right dependencies for the holochain-gym.
@@ -21,7 +23,7 @@ a `default.nix` file. Run the following command in your terminal:
 nix-shell
 ```
 The very first time you run this, it will take long time, somewhere between 20 and 80 minutes.
-Because is will download, install and compile everything you need. After that it will only take a second or two to run.
+This is because it will download, install and compile everything you need. After that it will only take a second or two to run.
 Then you can build with:
 
 ### Building
@@ -48,9 +50,5 @@ or if you want to do it manually:
 ```bash
 cd test
 npm install
-<<<<<<< ours:intermediate/2.capability-tokens/README.md
-npm tests
-=======
 npm test
->>>>>>> theirs:intermediate/3.capability-tokens/README.md
 ```
