@@ -1,36 +1,53 @@
 use hdk::prelude::*;
 use holo_hash::HeaderHashB64;
+use holo_hash::EntryHashB64;
 
-entry_defs![KitchenJarLabel::entry_def(), KitchenJarLabelUpdate::entry_def()];
+entry_defs![SnackingLog::entry_def()];
 
-#[hdk_entry(id = "KitchenJarLabel")]
-pub struct KitchenJarLabel(String);
+#[hdk_entry(id = "SnackingLog")]
+pub struct SnackingLog(String);
 
-#[hdk_entry(id = "KitchenJarLabelUpdate")]
-pub struct KitchenJarLabelUpdate{
-    label: String,
-    header_hash: HeaderHashB64,
+#[hdk_entry(id = "headerAndEntryHash")]
+pub struct HeaderAndEntryHash{
+    entry_hash: EntryHashB64,
+    header_hash: HeaderHashB64
 }
 
+
 #[hdk_extern]
-pub fn add_label(input: KitchenJarLabel) -> ExternResult<HeaderHashB64> {
+pub fn register_snacking(input: SnackingLog) -> ExternResult<HeaderAndEntryHash> {
     let a: HeaderHash = create_entry(&input)?;
-    Ok(HeaderHashB64::from(a))
+    let b: EntryHash = hash_entry(&input)?;
+    let result = HeaderAndEntryHash{
+        entry_hash: EntryHashB64::from(b),
+        header_hash: HeaderHashB64::from(a)
+    };
+    Ok(result)
 }
 
 #[hdk_extern]
-pub fn get_label(hash: HeaderHashB64) -> ExternResult<KitchenJarLabel> {
+pub fn get_by_header_hash(hash: HeaderHashB64) -> ExternResult<SnackingLog> {
     let element: Element = get(HeaderHash::from(hash), GetOptions::default())?
-        .ok_or(WasmError::Guest(String::from("Could not find KitchenJarLabel")))?;
-    let option: Option<KitchenJarLabel> = element.entry().to_app_option()?;
-    let label: KitchenJarLabel = option.unwrap();
-    Ok(label)
+        .ok_or(WasmError::Guest(String::from("Could not find SnackingLog for header hash")))?;
+    let option: Option<SnackingLog> = element.entry().to_app_option()?;
+    let snacklog: SnackingLog = option.unwrap();
+    Ok(snacklog)
 }
 
 #[hdk_extern]
-pub fn update_label(a:KitchenJarLabelUpdate) -> ExternResult<HeaderHashB64> {
-    let header_hash: HeaderHash = HeaderHash::from(a.header_hash);
-    let new_label: KitchenJarLabel = KitchenJarLabel(a.label);
-    let header_hash_update: HeaderHash = update_entry(header_hash, new_label)?;
-    Ok(HeaderHashB64::from(header_hash_update))   
+pub fn get_by_entry_hash(hash: EntryHashB64) -> ExternResult<SnackingLog> {
+    let element: Element = get(EntryHash::from(hash), GetOptions::default())?
+        .ok_or(WasmError::Guest(String::from("Could not find SnackingLog for header hash")))?;
+    let option: Option<SnackingLog> = element.entry().to_app_option()?;
+    let snacklog: SnackingLog = option.unwrap();
+    Ok(snacklog)
+}
+
+#[hdk_extern]
+pub fn get_header_hash_by_content(input: SnackingLog) -> ExternResult<HeaderHashB64> {
+    let hash: EntryHash = hash_entry(&input)?;
+    let element: Element = get(EntryHash::from(hash), GetOptions::default())?
+        .ok_or(WasmError::Guest(String::from("Could not find SnackingLog based on content")))?;
+    let a: HeaderHash = element.header_address().clone();
+    Ok(HeaderHashB64::from(a))
 }
