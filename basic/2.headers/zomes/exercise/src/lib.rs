@@ -1,28 +1,35 @@
 use hdk::prelude::*;
 use holo_hash::HeaderHashB64;
+use holo_hash::EntryHashB64;
 
-entry_defs![KitchenJarLabel::entry_def(), KitchenJarLabelUpdate::entry_def()];
+entry_defs![SnackingLog::entry_def()];
 
-#[hdk_entry(id = "KitchenJarLabel")]
-pub struct KitchenJarLabel(String);
+#[hdk_entry(id = "SnackingLog")]
+pub struct SnackingLog(String);
 
-#[hdk_entry(id = "KitchenJarLabelUpdate")]
-pub struct KitchenJarLabelUpdate{
-    label: String,
-    header_hash: HeaderHashB64,
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct HeaderAndEntryHash{
+    entry_hash: EntryHashB64,
+    header_hash: HeaderHashB64
 }
 
-#[hdk_extern]
-pub fn add_label(input: KitchenJarLabel) -> ExternResult<HeaderHashB64> {
-    unimplemented!
-}
 
 #[hdk_extern]
-pub fn get_label(hash: HeaderHashB64) -> ExternResult<KitchenJarLabel> {
+pub fn register_snacking(input: SnackingLog) -> ExternResult<HeaderAndEntryHash> {
     unimplemented!()
 }
 
 #[hdk_extern]
-pub fn update_label(a:KitchenJarLabelUpdate) -> ExternResult<HeaderHashB64> {
+pub fn get_by_header_hash(hash: HeaderHashB64) -> ExternResult<SnackingLog> {
+    unimplemented!()
+}
+
+#[hdk_extern]
+pub fn get_by_entry_hash(hash: EntryHashB64) -> ExternResult<SnackingLog> {
+    unimplemented!()
+}
+
+#[hdk_extern]
+pub fn get_header_hash_by_content(input: SnackingLog) -> ExternResult<HeaderHashB64> {
     unimplemented!()
 }

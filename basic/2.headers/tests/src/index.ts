@@ -22,7 +22,7 @@ const sleep = (ms) =>
 const orchestrator = new Orchestrator();
 
 orchestrator.registerScenario(
-  "add, get and update label",
+  "register snacking, get snacking log by header hash, by entry hash, getting header hash by content",
   async (s, t) => {
     const [alice] = await s.players([conductorConfig]);
 
@@ -30,68 +30,38 @@ orchestrator.registerScenario(
     // array structure as you created in your installation array.
     const [[alice_common]] = await alice.installAgentsHapps(installation);
 
-    // add and get label #1 pistacchios
-    let headerHash1 = await alice_common.cells[0].call(
+    // <add snacking log: >"april 2: lemon pie"
+    let headerAndEntryHash = await alice_common.cells[0].call(
       "exercise",
-      "add_label",
-      "#1 pistacchios",
+      "register_snacking",
+      "april 2: lemon pie",
     );
-    let label1 = await alice_common.cells[0].call(
-      "exercise",
-      "get_label",
-       headerHash1 
-    );
-    t.equal(label1, "#1 pistacchios");
+    let entryHash = headerAndEntryHash.entry_hash;
+    let headerHash = headerAndEntryHash.header_hash;
 
-    // add and get label #2 brazil nuts
+    // get snacking log based on headerhash
+    let snackinglog1 = await alice_common.cells[0].call(
+      "exercise",
+      "get_by_header_hash",
+       headerHash 
+    );
+    t.equal(snackinglog1, "april 2: lemon pie");
+
+    // get snacking log based on entryhash
+    let snackinglog2 = await alice_common.cells[0].call(
+      "exercise",
+      "get_by_entry_hash",
+        entryHash 
+    );
+    t.equal(snackinglog2, "april 2: lemon pie");
+
+    // get header_hash for snacking_log based on content
     let headerHash2 = await alice_common.cells[0].call(
       "exercise",
-      "add_label",
-      "#2 brazil nuts",
+      "get_header_hash_by_content",
+      "april 2: lemon pie"
     );
-    let label2 = await alice_common.cells[0].call(
-      "exercise",
-      "get_label",
-       headerHash2 
-    );
-    t.equal(label2, "#2 brazil nuts");
-
-    // add and get label #3 peanuts
-    let headerHash3 = await alice_common.cells[0].call(
-      "exercise",
-      "add_label",
-      "#3 peanuts",
-    );
-    let label3 = await alice_common.cells[0].call(
-      "exercise",
-      "get_label",
-       headerHash3
-    );
-    t.equal(label3, "#3 peanuts");
-
-    // update label #3 peanuts to #3 cashews
-    let headerHash3update = await alice_common.cells[0].call(
-      "exercise",
-      "update_label",
-      {
-        label: "#3 cashews",
-        header_hash: headerHash3,  //headerhash of the entry to update
-      },
-    );
-    let label3update = await alice_common.cells[0].call(
-      "exercise",
-      "get_label",
-      headerHash3update
-    );
-    t.equal(label3update, "#3 cashews");
-
-    // You can still get the original entry
-    let label3again = await alice_common.cells[0].call(
-      "exercise",
-      "get_label",
-       headerHash3
-    );
-    t.equal(label3again, "#3 peanuts");
+    t.equal(headerHash, headerHash2);
   }
 );
 
