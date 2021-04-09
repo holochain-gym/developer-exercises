@@ -55,14 +55,6 @@ orchestrator.registerScenario(
     );
     t.equal(snackinglog2, "april 2: lemon pie");
 
-    // get snacking log based on entryhash using get_by_header_hash
-    let snackinglog3 = await alice_common.cells[0].call(
-      "exercise",
-      "get_by_header_hash",
-        entryHash 
-    );
-    t.equal(snackinglog3, "april 2: lemon pie");
-
     // get header_hash for snacking_log based on content
     let headerHash2 = await alice_common.cells[0].call(
       "exercise",
