@@ -21,7 +21,7 @@ a `default.nix` file. Run the following command in your terminal:
 nix-shell
 ```
 The very first time you run this, it will take long time, somewhere between 20 and 80 minutes.
-Because is will download, install and compile everything you need. After that it will only take a second or two to run.
+This is because it will download, install and compile everything you need. After that it will only take a second or two to run.
 Then you can build with:
 
 ### Building
