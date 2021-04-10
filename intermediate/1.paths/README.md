@@ -28,7 +28,11 @@ Then you can build with:
 
 ### Building
 
-This will take some time, but will provide you with the latest RSM binaries. Then you can build with:
+Use this simple script
+```
+./run_build.sh
+```
+or if you want to do it manually:
 
 ```bash
 CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown
@@ -37,8 +41,14 @@ hc dna pack workdir
 
 ### Testing
 
+Use this simple script
+```
+./run_tests.sh
+```
+or if you want to do it manually:
+
 ```bash
 cd test
 npm install
-npm test
+npm tests
 ```
