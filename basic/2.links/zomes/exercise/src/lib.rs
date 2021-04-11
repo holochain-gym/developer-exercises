@@ -1,5 +1,3 @@
-use hdk::info::agent_info;
-use hdk::link::get_links;
 use hdk::prelude::*;
 
 //  1. Declare an entry data type called Post and register it with the entry_defs macro
