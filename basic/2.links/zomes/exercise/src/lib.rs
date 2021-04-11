@@ -16,9 +16,8 @@ pub struct Post(String);
 //      the tag option, tag-less posts will need to be passed an empty string --> ''
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct ExternalPostData {
+pub struct CreatePostInput {
     content: String,
-    tag: String,
 }
 
 //  3. create_post()
@@ -28,17 +27,7 @@ pub struct ExternalPostData {
 
 #[hdk_extern]
 pub fn create_post(external_data: ExternalPostData) -> ExternResult<EntryHash> {
-    let post: Post = Post(external_data.content);
-    let _post_header_hash: HeaderHash = create_entry(&post)?;
-    let post_entry_hash: EntryHash = hash_entry(&post)?;
-
-    let _new_link: HeaderHash = create_link(
-        HoloHash::from(agent_info()?.agent_latest_pubkey),
-        post_entry_hash.clone(),
-        LinkTag::new(external_data.tag),
-    )?;
-
-    Ok(post_entry_hash.clone())
+    unimplemented!()
 }
 
 //  4. get_posts_for_agent()
@@ -48,27 +37,5 @@ pub fn create_post(external_data: ExternalPostData) -> ExternResult<EntryHash> {
 
 #[hdk_extern]
 pub fn get_posts_for_agent(link_query: String) -> ExternResult<Vec<Post>> {
-    let mut content: Vec<Post> = Vec::new();
-
-    let links: Links = get_links(
-        HoloHash::from(agent_info()?.agent_latest_pubkey),
-        Some(LinkTag::new(link_query)),
-    )
-    .unwrap();
-
-    for l in links.into_inner() {
-        content.push(_return_content(l).unwrap())
-    }
-
-    Ok(content)
-}
-
-fn _return_content(link: Link) -> ExternResult<Post> {
-    let element: Element = get(link.target, GetOptions::default())
-        .unwrap()
-        .ok_or(WasmError::Guest(String::from("Entry not found")))
-        .unwrap();
-    let entry_option: Option<Post> = element.entry().to_app_option()?;
-    let entry: Post = entry_option.unwrap();
-    Ok(entry)
+    unimplemented!()
 }
