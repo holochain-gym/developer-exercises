@@ -1,10 +1,10 @@
 # Hash Exercise
 
-[Working with hashes explained](https://holochain-gym.github.io/developers/basic/hashes/)
+[Working with hashes explained](https://holochain-gym.github.io/developers/basic/headers/)
 
 ## Exercise
 
-- Open your IDE in [the zome](/basic/1.hashes/zomes/exercise).
+- Open your IDE in [the zome](/basic/2.headers/zomes/exercise).
 - Add everything to create and get entries based on hashes. Read the [explanation](https://holochain-gym.github.io/developers/basic/hashes/) for this.
 - Code all `unimplemented!()` functions.
 - Compile and run the tests, and check that the test passes.
