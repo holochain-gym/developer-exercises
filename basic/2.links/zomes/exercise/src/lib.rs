@@ -29,10 +29,10 @@ pub fn create_post(external_data: CreatePostInput) -> ExternResult<EntryHash> {
 }
 
 //  4. get_posts_for_agent()
-//      Given the agent_latest_pubkey, find all posts created by the given agent
+//      Given the agent_pubkey, find all posts created by the given agent
 //      and return a vector of all the Post structures using get().
 
 #[hdk_extern]
-pub fn get_posts_for_agent(link_query: String) -> ExternResult<Vec<Post>> {
+pub fn get_posts_for_agent(agent_pubkey: AgentPubKey) -> ExternResult<Vec<Post>> {
     unimplemented!()
 }
