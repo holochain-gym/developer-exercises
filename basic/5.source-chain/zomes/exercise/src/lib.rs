@@ -19,15 +19,8 @@ pub struct HeaderHashPair{
 pub struct Answer(String);
 
 
-
-
 #[hdk_extern]
 pub fn register_snacking(input: SnackingLog) -> ExternResult<HeaderHashB64> {
-    Ok(HeaderHashB64::from(create_entry(&input)?))
-}
-
-#[hdk_extern]
-pub fn register_workout(input: WorkoutLog) -> ExternResult<HeaderHashB64> {
     Ok(HeaderHashB64::from(create_entry(&input)?))
 }
 
@@ -64,7 +57,7 @@ pub fn is_previous_header_hash(pair: HeaderHashPair) -> ExternResult<Answer> {
 #[hdk_extern]
 pub fn happened_before(pair: HeaderHashPair) -> ExternResult<Answer> {
     // unimplemented()
-    // This function can return any of these answers
+    // This function always returns one of these answers
     // Ok(Answer(String::from("happened before"))),
     // Ok(Answer(String::from("did NOT happen before")))
 
@@ -88,6 +81,9 @@ pub fn happened_before(pair: HeaderHashPair) -> ExternResult<Answer> {
         }
     }
     Ok(Answer(String::from("did NOT happen before")))
+
+    // TODO
+    // add alternative solution with query, so user knows there is a simpler way, that will be explained later on
 }
 
 fn get_previous_header(a:HeaderHash) -> Option<HeaderHash> {
@@ -101,22 +97,14 @@ fn get_previous_header(a:HeaderHash) -> Option<HeaderHash> {
     }
 }
 
+#[hdk_extern]
+pub fn get_header_sequence_number(a: HeaderHashB64) -> ExternResult<Answer> {
+    // unimplemented()
+    // Ok(Answer(format!("header sequence is {}", sequence)))
 
-
-// #[hdk_extern]
-// pub fn get_by_entry_hash(hash: EntryHashB64) -> ExternResult<SnackingLog> {
-//     let element: Element = get(EntryHash::from(hash), GetOptions::default())?
-//         .ok_or(WasmError::Guest(String::from("Could not find SnackingLog for header hash")))?;
-//     let option: Option<SnackingLog> = element.entry().to_app_option()?;
-//     let snacklog: SnackingLog = option.unwrap();
-//     Ok(snacklog)
-// }
-
-// #[hdk_extern]
-// pub fn get_header_hash_by_content(input: SnackingLog) -> ExternResult<HeaderHashB64> {
-//     let hash: EntryHash = hash_entry(&input)?;
-//     let element: Element = get(EntryHash::from(hash), GetOptions::default())?
-//         .ok_or(WasmError::Guest(String::from("Could not find SnackingLog based on content")))?;
-//     let a: HeaderHash = element.header_address().clone();
-//     Ok(HeaderHashB64::from(a))
-// }
+    let element: Element = get(HeaderHash::from(a), GetOptions::default())?
+    .ok_or(WasmError::Guest(String::from("Could not find current element")))?;
+    let header: Header = element.header().clone();
+    let sequence:u32 =  header.header_seq();
+    Ok(Answer(format!("header sequence is {}", sequence)))
+}
