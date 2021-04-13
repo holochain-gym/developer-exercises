@@ -77,6 +77,16 @@ orchestrator.registerScenario(
     );
     console.log(answer2);
     t.equal(answer2, "happened before");
+    
+    // get header sequence number
+    let answer3 = await alice_common.cells[0].call(
+      "exercise",
+      "get_header_sequence_number",
+      headerHash1
+    );
+    console.log(answer3);
+    t.equal(answer3, "header sequence is 4");
+    
   }
 );
 
