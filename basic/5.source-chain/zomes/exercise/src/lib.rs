@@ -10,14 +10,13 @@ pub struct SnackingLog(String);
 pub struct WorkoutLog(String);
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct HeaderHashPair{
+pub struct HeaderHashPair {
     current: HeaderHashB64,
-    previous: HeaderHashB64
+    previous: HeaderHashB64,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Answer(String);
-
 
 #[hdk_extern]
 pub fn register_snacking(input: SnackingLog) -> ExternResult<HeaderHashB64> {
