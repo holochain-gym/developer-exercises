@@ -61,7 +61,7 @@ orchestrator.registerScenario(
       "get_header_hash_by_content",
       "april 2: lemon pie"
     );
-    t.equal(headerHash, headerHash2);
+    t.same(headerHash, headerHash2);   // or t.deepEqual()    --> compares on content of array, not on identity
   }
 );
 

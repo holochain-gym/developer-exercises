@@ -33,7 +33,9 @@ orchestrator.registerScenario(
     let hash = await alice_common.cells[0].call(
       "exercise",
       "say_greeting",
-      "Hello World",
+      {
+        content: "Hello World",
+      }
     );
     t.ok(hash);
   }
