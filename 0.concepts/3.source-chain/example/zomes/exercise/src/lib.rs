@@ -26,13 +26,6 @@ pub fn register_snacking(input: SnackingLog) -> ExternResult<HeaderHashB64> {
 
 #[hdk_extern]
 pub fn is_previous_header_hash(pair: HeaderHashPair) -> ExternResult<Answer> {
-    // unimplemented()
-    // This function can return any of these answers
-    // Ok(Answer(String::from("previous header NOT FOUND"))),
-    // Ok(Answer(String::from("is NOT previous header")))
-    // Ok(Answer(String::from("IS previous header")))
-
-
     let current_header_hash_from_input:HeaderHash = HeaderHash::from(pair.current);
     let prev_header_hash_from_input:HeaderHash = HeaderHash::from(pair.previous);
 
@@ -56,12 +49,6 @@ pub fn is_previous_header_hash(pair: HeaderHashPair) -> ExternResult<Answer> {
 
 #[hdk_extern]
 pub fn happened_before(pair: HeaderHashPair) -> ExternResult<Answer> {
-    // unimplemented()
-    // This function always returns one of these answers
-    // Ok(Answer(String::from("happened before"))),
-    // Ok(Answer(String::from("did NOT happen before")))
-
-
     let starting_point:HeaderHash = HeaderHash::from(pair.current);
     let potential_before:HeaderHash = HeaderHash::from(pair.previous);
 
@@ -81,9 +68,6 @@ pub fn happened_before(pair: HeaderHashPair) -> ExternResult<Answer> {
         }
     }
     Ok(Answer(String::from("did NOT happen before")))
-
-    // TODO
-    // add alternative solution with query, so user knows there is a simpler way, that will be explained later on
 }
 
 fn get_previous_header(a:HeaderHash) -> Option<HeaderHash> {
@@ -99,9 +83,6 @@ fn get_previous_header(a:HeaderHash) -> Option<HeaderHash> {
 
 #[hdk_extern]
 pub fn get_header_sequence_number(a: HeaderHashB64) -> ExternResult<Answer> {
-    // unimplemented()
-    // Ok(Answer(format!("header sequence is {}", sequence)))
-
     let element: Element = get(HeaderHash::from(a), GetOptions::default())?
     .ok_or(WasmError::Guest(String::from("Could not find current element")))?;
     let header: Header = element.header().clone();
