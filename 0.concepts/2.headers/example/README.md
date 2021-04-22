@@ -1,9 +1,9 @@
-# Concept - Hashes
+# Concept - Headers
 
 
 ## Exercise
 
-[Working with hashes explained](https://holochain-gym.github.io/developers/concepts/hashes/)
+[Headers explained](https://holochain-gym.github.io/developers/concepts/headers/)
 ---
 
 ### Setup - nix-shell

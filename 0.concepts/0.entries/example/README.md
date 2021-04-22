@@ -1,15 +1,8 @@
-# 1. Entries Exercise
+# Concept - Entries
 
-[Creating entries explained](https://holochain-gym.github.io/developers/basic/entries/)
+## Example
 
-## Exercise
-
-- Open your IDE in [the zome](/basic/0.entries/zomes/exercise).
-- Add everything to create entries. Read the [explanation](https://holochain-gym.github.io/developers/basic/entries/) for this.
-- Code all `unimplemented!()` functions.
-- Compile and run the tests, and check that the test passes.
-
----
+[Creating entries explained](https://holochain-gym.github.io/developers/concepts/entries/)
 
 ### Setup - nix-shell
 IMPORTANT: You need to run these exercises in the correct nix-shell.

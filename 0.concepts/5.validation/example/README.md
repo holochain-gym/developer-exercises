@@ -1,9 +1,9 @@
-# Concept - Hashes
+# Concept - Source chain
 
 
 ## Exercise
 
-[Working with hashes explained](https://holochain-gym.github.io/developers/concepts/hashes/)
+[Source chain explained](https://holochain-gym.github.io/developers/concepts/source-chain/)
 ---
 
 ### Setup - nix-shell

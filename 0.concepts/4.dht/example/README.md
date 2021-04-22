@@ -1,9 +1,9 @@
-# Concept - Hashes
+# Concept - DHT
 
 
 ## Exercise
 
-[Working with hashes explained](https://holochain-gym.github.io/developers/concepts/hashes/)
+[DHT explained](https://holochain-gym.github.io/developers/concepts/dht/)
 ---
 
 ### Setup - nix-shell
