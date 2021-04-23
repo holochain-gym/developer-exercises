@@ -36,7 +36,9 @@ pub fn is_previous_header_hash(pair: HeaderHashPair) -> ExternResult<Answer> {
     let prev_header:HeaderHash;
 
     match Some(prev_header_option) {
-        Some(a) => prev_header = a.unwrap().clone(),
+        Some(a) => prev_header = a
+                                .ok_or(WasmError::Guest(String::from("Prev header is empty")))?
+                                .clone(),
         None => return Ok(Answer(String::from("previous header NOT FOUND"))),
     }
 
@@ -54,7 +56,10 @@ pub fn happened_before(pair: HeaderHashPair) -> ExternResult<Answer> {
 
     let mut current:Option<HeaderHash> = Some(starting_point);
     while current != None {
-        let found:Option<HeaderHash> = get_previous_header(current.unwrap().clone());
+        let found:Option<HeaderHash> = get_previous_header(
+            current
+            .ok_or(WasmError::Guest(String::from("Prev header is empty")))?
+            .clone());
         match found {
             Some(a) => {
                 if a == potential_before {
@@ -76,7 +81,7 @@ fn get_previous_header(a:HeaderHash) -> Option<HeaderHash> {
     let el_option:Option<Element> = ext_result.unwrap_or(None);
     
     match Some(el_option) {
-        Some(a) => return Some(a.unwrap().header().clone().prev_header().unwrap().clone()),
+        Some(element) => return Some(element.unwrap().header().clone().prev_header().unwrap().clone()),
         None => return None,
     }
 }

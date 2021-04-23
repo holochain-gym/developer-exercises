@@ -1,4 +1,5 @@
 use hdk::prelude::*;
+use holo_hash::EntryHashB64;
 
 entry_defs![Book::entry_def()];
 
@@ -9,12 +10,15 @@ pub struct Book {
 }
 
 #[hdk_extern]
-pub fn add_book(external_input: Book) -> ExternResult<EntryHash> {
+pub fn add_book(external_input: Book) -> ExternResult<EntryHashB64> { 
+    // We could return EntryHash inside the result, but when send hashes outside your zome, 
+    // it is safer to use a base64 version of the hash
+
     let book: Book = external_input;
     let _unused_var: HeaderHash = create_entry(&book)?;
     let entry_hash: EntryHash = hash_entry(&book)?;
 
-    Ok(entry_hash)
+    Ok(EntryHashB64::from(entry_hash))
 }
 
 #[hdk_extern]

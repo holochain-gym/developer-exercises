@@ -29,17 +29,19 @@ pub fn get_by_header_hash(external_hash_b64: HeaderHashB64) -> ExternResult<Snac
     let element: Element = get(HeaderHash::from(external_hash_b64), GetOptions::default())?
         .ok_or(WasmError::Guest(String::from("Could not find SnackingLog for header hash")))?;
     let option: Option<SnackingLog> = element.entry().to_app_option()?;
-    let snack_log: SnackingLog = option.expect("Unexpected missing option");
+    let snack_log: SnackingLog = option
+        .ok_or(WasmError::Guest(String::from("No book inside option")))?;
 
     Ok(snack_log)
 }
 
 #[hdk_extern]
-pub fn get_by_entry_hash(hash: EntryHash) -> ExternResult<SnackingLog> {
-    let element: Element = get(hash.into_hash(), GetOptions::default())?
+pub fn get_by_entry_hash(external_hash_b64: EntryHashB64) -> ExternResult<SnackingLog> {
+    let element: Element = get(EntryHash::from(external_hash_b64), GetOptions::default())?
         .ok_or(WasmError::Guest(String::from("Could not find SnackingLog for header hash")))?;
     let option: Option<SnackingLog> = element.entry().to_app_option()?;
-    let snack_log: SnackingLog = option.expect("Unexpected missing option");
+    let snack_log: SnackingLog = option
+        .ok_or(WasmError::Guest(String::from("No book inside option")))?;
 
     Ok(snack_log)
 }
