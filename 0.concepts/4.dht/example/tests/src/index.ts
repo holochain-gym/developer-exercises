@@ -70,7 +70,7 @@ orchestrator.registerScenario(
     // even if Bob does not know the hash, he can GUESS the entry
     let password3 = await bob_common.cells[0].call(
       "exercise",
-      "get_hash_by_content",
+      "get_password_by_guessing",
       {
         username: "Alice",
         code: "1234",

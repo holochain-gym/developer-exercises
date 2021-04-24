@@ -33,7 +33,7 @@ pub fn get_password(external_input: EntryHash) -> ExternResult<Password> {
 }
 
 #[hdk_extern]
-pub fn get_hash_by_content(external_input: Password) -> ExternResult<Password> { 
+pub fn get_password_by_guessing(external_input: Password) -> ExternResult<Password> { 
     let password: Password = external_input;
     let entry_hash: EntryHash = hash_entry(&password)?;
     let element: Element = get(entry_hash, GetOptions::default())?
