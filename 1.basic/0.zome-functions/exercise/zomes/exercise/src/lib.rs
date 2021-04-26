@@ -1,19 +1,28 @@
-use hdk::prelude::*;
 
-entry_defs![Greeting::entry_def()];
 
-// THIS EXERCISE IS NOT FINISHED YET
-
-#[hdk_entry(id = "greeting")]
-pub struct Greeting(String);
-
-#[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct SomeExternalInput {
-    content: String,
+    first_name: String,
+    last_name: String,
 }
 
-#[hdk_extern]
-pub fn say_greeting(input: SomeExternalInput) -> ExternResult<HeaderHash> {
-    let greeting: Greeting = Greeting(input.content);
-    create_entry(greeting)
+pub struct SomeExternalOutput(String);
+
+pub fn hello_world(_:()) -> ExternResult<SomeExternalOutput> {
+    let message: String = String::from("Hello world");
+    let output: SomeExternalOutput = SomeExternalOutput(message);
+    
+    Ok(output)
+}
+
+pub fn say_my_name(external_input:SomeExternalInput) -> ExternResult<SomeExternalOutput> {
+    let message: String = format!("Your name is {} {}", 
+                                    external_input.first_name, 
+                                    external_input.last_name);
+    let output: SomeExternalOutput = SomeExternalOutput(message);
+    
+    Ok(output)
+}
+
+pub fn get_agent_id(_:()) -> ExternResult<AgentInfo> {
+    Ok(agent_info()?)
 }
