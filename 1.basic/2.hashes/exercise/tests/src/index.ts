@@ -40,14 +40,6 @@ orchestrator.registerScenario(
     );
 
     t.ok(entryHash, "test add book");
-
-    let book = await alice_common.cells[0].call(
-      "exercise",
-      "get_book",
-      entryHash
-    );
-
-    t.ok(book, "test get book"); //
   }
 );
 

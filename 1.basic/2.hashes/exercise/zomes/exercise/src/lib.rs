@@ -1,5 +1,4 @@
 use hdk::prelude::*;
-use holo_hash::EntryHashB64;
 
 entry_defs![Book::entry_def()];
 
