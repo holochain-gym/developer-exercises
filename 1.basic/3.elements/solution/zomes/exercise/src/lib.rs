@@ -1,5 +1,4 @@
 use hdk::prelude::*;
-use holo_hash::HeaderHashB64;
 
 entry_defs![SnackingLog::entry_def()];
 
@@ -7,18 +6,18 @@ entry_defs![SnackingLog::entry_def()];
 pub struct SnackingLog(String);
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct HeaderAndEntryHash {
-    entry_hash: EntryHash,
-    header_hash: HeaderHash,
+pub struct HeaderAndEntryHash{
+    entry_hash: EntryHashB64,
+    header_hash: HeaderHashB64,
 }
 
 #[hdk_extern]
 pub fn register_snacking(input: SnackingLog) -> ExternResult<HeaderAndEntryHash> {
     let a: HeaderHash = create_entry(&input)?;
     let b: EntryHash = hash_entry(&input)?;
-    let result = HeaderAndEntryHash {
-        header_hash: a,
-        entry_hash: b,
+    let result = HeaderAndEntryHash{
+        header_hash: HeaderHashB64::from(a),
+        entry_hash: EntryHashB64::from(b),
     };
     Ok(result)
 }
@@ -35,7 +34,7 @@ pub fn get_by_header_hash(header_hash: HeaderHash) -> ExternResult<SnackingLog> 
 }
 
 #[hdk_extern]
-pub fn get_by_entry_hash(entry_hash: EntryHashB64) -> ExternResult<SnackingLog> {
+pub fn get_by_entry_hash(entry_hash: EntryHash) -> ExternResult<SnackingLog> {
     let element: Element = get(entry_hash, GetOptions::default())?
         .ok_or(WasmError::Guest(String::from("Could not find SnackingLog for header hash")))?;
     let option: Option<SnackingLog> = element.entry().to_app_option()?;

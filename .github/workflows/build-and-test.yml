@@ -4,10 +4,10 @@ name: Solution Tests
 on:
   push:
     branches:
-      - solution
+      - master
   pull_request:
     branches:
-      - solution
+      - master
 
 jobs:
   # Set the job key. The key is displayed as the job name

@@ -1,4 +1,5 @@
 
+// Problem statement: https://holochain-gym.github.io/developers/basic/zome-functions/
 
 pub struct SomeExternalInput {
     first_name: String,

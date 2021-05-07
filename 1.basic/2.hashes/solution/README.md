@@ -1,8 +1,10 @@
-# Concept - Entries
+# Concept - Hashes
 
-## Example
 
-[Creating entries explained](https://holochain-gym.github.io/developers/basic/entries/)
+## Exercise
+
+[Working with hashes explained](https://holochain-gym.github.io/developers/concepts/hashes/)
+---
 
 ### Setup - nix-shell
 IMPORTANT: You need to run these exercises in the correct nix-shell.
