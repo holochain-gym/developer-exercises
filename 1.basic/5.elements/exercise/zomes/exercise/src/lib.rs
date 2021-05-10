@@ -27,6 +27,6 @@ pub fn get_by_entry_hash(entry_hash: EntryHash) -> ExternResult<SnackingLog> {
 }
 
 #[hdk_extern]
-pub fn get_header_hash_by_content(input: SnackingLog) -> ExternResult<HeaderHash> {
-    unimplemented!()
+pub fn get_all_headers_from_content(input: SnackingLog) -> ExternResult<Vec<SignedHeaderHashed>> {
+        unimplemented!()
 }
