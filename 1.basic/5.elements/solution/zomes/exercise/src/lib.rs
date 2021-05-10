@@ -1,4 +1,5 @@
 use hdk::prelude::*;
+use holo_hash::{HeaderHashB64, EntryHashB64};
 
 entry_defs![SnackingLog::entry_def()];
 
@@ -15,7 +16,7 @@ pub struct HeaderAndEntryHash{
 pub fn register_snacking(input: SnackingLog) -> ExternResult<HeaderAndEntryHash> {
     let a: HeaderHash = create_entry(&input)?;
     let b: EntryHash = hash_entry(&input)?;
-    let result = HeaderAndEntryHash{
+    let result = HeaderAndEntryHash {
         header_hash: HeaderHashB64::from(a),
         entry_hash: EntryHashB64::from(b),
     };
@@ -23,8 +24,8 @@ pub fn register_snacking(input: SnackingLog) -> ExternResult<HeaderAndEntryHash>
 }
 
 #[hdk_extern]
-pub fn get_by_header_hash(header_hash: HeaderHash) -> ExternResult<SnackingLog> {
-    let element: Element = get(header_hash, GetOptions::default())?
+pub fn get_by_header_hash(header_hash: HeaderHashB64) -> ExternResult<SnackingLog> {
+    let element: Element = get(HeaderHash::from(header_hash), GetOptions::default())?
         .ok_or(WasmError::Guest(String::from("Could not find SnackingLog for header hash")))?;
     let option: Option<SnackingLog> = element.entry().to_app_option()?;
     let snack_log: SnackingLog = option
@@ -34,8 +35,8 @@ pub fn get_by_header_hash(header_hash: HeaderHash) -> ExternResult<SnackingLog> 
 }
 
 #[hdk_extern]
-pub fn get_by_entry_hash(entry_hash: EntryHash) -> ExternResult<SnackingLog> {
-    let element: Element = get(entry_hash, GetOptions::default())?
+pub fn get_by_entry_hash(entry_hash: EntryHashB64) -> ExternResult<SnackingLog> {
+    let element: Element = get(EntryHash::from(entry_hash), GetOptions::default())?
         .ok_or(WasmError::Guest(String::from("Could not find SnackingLog for header hash")))?;
     let option: Option<SnackingLog> = element.entry().to_app_option()?;
     let snack_log: SnackingLog = option
@@ -45,11 +46,15 @@ pub fn get_by_entry_hash(entry_hash: EntryHash) -> ExternResult<SnackingLog> {
 }
 
 #[hdk_extern]
-pub fn get_header_hash_by_content(input: SnackingLog) -> ExternResult<HeaderHash> {
+pub fn get_all_headers_from_content(input: SnackingLog) -> ExternResult<Vec<SignedHeaderHashed>> {
     let hash: EntryHash = hash_entry(&input)?;
-    let element: Element = get(EntryHash::from(hash), GetOptions::default())?
-        .ok_or(WasmError::Guest(String::from("Could not find SnackingLog based on content")))?;
-    let header_hash: HeaderHash = element.header_address().clone();
-
-    Ok(header_hash)
+    let details = get_details(hash, GetOptions::default())?;
+        
+    match details {
+        Some(Details::Entry(entry_details)) => {
+            Ok(entry_details.headers)
+        },
+        None => Ok(vec![]),
+        _ => Err(WasmError::Guest(String::from("Could not find SnackingLog based on content")))
+    }
 }

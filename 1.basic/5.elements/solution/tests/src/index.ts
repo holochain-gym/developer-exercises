@@ -14,6 +14,11 @@ const installation: InstallAgentsHapps = [
     // happ 0
     [exercise],
   ],
+  // agent 1
+  [
+    // happ 0
+    [exercise],
+  ],
 ];
 
 const sleep = (ms) =>
@@ -28,7 +33,7 @@ orchestrator.registerScenario(
 
     // install your happs into the coductors and destructuring the returned happ data using the same
     // array structure as you created in your installation array.
-    const [[alice_common]] = await alice.installAgentsHapps(installation);
+    const [[alice_common], [bob_common]] = await alice.installAgentsHapps(installation);
 
     // <add snacking log: >"april 2: lemon pie"
     let headerAndEntryHash = await alice_common.cells[0].call(
@@ -56,12 +61,34 @@ orchestrator.registerScenario(
     t.equal(snackinglog2, "april 2: lemon pie");
 
     // get header_hash for snacking_log based on content
-    let headerHash2 = await alice_common.cells[0].call(
+    let headers = await alice_common.cells[0].call(
       "exercise",
-      "get_header_hash_by_content",
+      "get_all_headers_from_content",
       "april 2: lemon pie"
     );
-    t.same(headerHash, headerHash2);   // or t.deepEqual()    --> compares on content of array, not on identity
+    t.equal(headers.length, 1);   // or t.deepEqual()    --> compares on content of array, not on identity
+
+    await bob_common.cells[0].call(
+      "exercise",
+      "register_snacking",
+      "april 2: lemon pie",
+    );
+
+    await sleep(50);
+
+    headers = await alice_common.cells[0].call(
+      "exercise",
+      "get_all_headers_from_content",
+      "april 2: lemon pie"
+    );
+    t.equal(headers.length, 2);  
+
+    headers = await alice_common.cells[0].call(
+      "exercise",
+      "get_all_headers_from_content",
+      "april 2: lemon pie3"
+    );
+    t.equal(headers.length, 0);  
   }
 );
 

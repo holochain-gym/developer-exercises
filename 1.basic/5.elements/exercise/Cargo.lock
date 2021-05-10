@@ -111,8 +111,10 @@ dependencies = [
 name = "exercise"
 version = "0.0.1"
 dependencies = [
+ "chrono",
  "derive_more",
  "hdk",
+ "holo_hash",
  "serde",
 ]
 
