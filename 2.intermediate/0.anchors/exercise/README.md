@@ -1,8 +1,16 @@
-# Concept - Entries
+# 0. Anchors Exercise
 
-## Example
+[Problem statement](https://holochain-gym.github.io/developers/intermediate/anchors/)
 
-[Creating entries explained](https://holochain-gym.github.io/developers/concepts/entries/)
+## Exercise
+
+- Open your IDE in [the zome](/intermediate/0.anchors/zomes/exercise).
+- Code all `unimplemented!()` functions.
+- Compile and run the tests, and check that all tests are passing.
+
+---
+
+---
 
 ### Setup - nix-shell
 IMPORTANT: You need to run these exercises in the correct nix-shell.
