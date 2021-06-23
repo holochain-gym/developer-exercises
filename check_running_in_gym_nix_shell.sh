@@ -1,6 +1,6 @@
 #!/bin/bash
 if [[ -z $IN_NIX_SHELL ]]; then
-    echo "I looks like you are NOT running in a nix-shell"
+    echo "It looks like you are NOT running in a nix-shell"
     echo "Go to the base folder of the developer-exercises, "
     echo "where you find default.nix, "
     echo "and run 'nix-shell' in the command line."
