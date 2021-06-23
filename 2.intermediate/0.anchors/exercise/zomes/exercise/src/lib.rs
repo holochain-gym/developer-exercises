@@ -1,9 +1,9 @@
 use hdk::prelude::*;
 
-entry_defs![Greeting::entry_def()];
+entry_defs![Post::entry_def(), Anchor::entry_def()];
 
-#[hdk_entry(id = "greeting")]
-pub struct Greeting(String);
+#[hdk_entry(id = "post")]
+pub struct Post(String);
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct SomeExternalInput {
@@ -11,7 +11,11 @@ pub struct SomeExternalInput {
 }
 
 #[hdk_extern]
-pub fn say_greeting(input: SomeExternalInput) -> ExternResult<HeaderHash> {
-    let greeting: Greeting = Greeting(input.content);
-    create_entry(greeting)
+pub fn create_post(input: SomeExternalInput) -> ExternResult<HeaderHash> {
+    unimplemented!()
+}
+
+#[hdk_extern]
+pub fn get_all_posts(_: ()) -> ExternResult<Vec<Post>> {
+    unimplemented!()
 }

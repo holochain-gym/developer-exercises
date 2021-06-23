@@ -1,4 +1,4 @@
-import { Orchestrator, Config, InstallAgentsHapps } from "@holochain/tryorama";
+import { Orchestrator, Config, InstallAgentsHapps, Player } from "@holochain/tryorama";
 import path from "path";
 
 const conductorConfig = Config.gen();
@@ -14,6 +14,10 @@ const installation: InstallAgentsHapps = [
     // happ 0
     [exercise],
   ],
+  [
+    // happ 0
+    [exercise],
+  ],
 ];
 
 const sleep = (ms) =>
@@ -22,22 +26,51 @@ const sleep = (ms) =>
 const orchestrator = new Orchestrator();
 
 orchestrator.registerScenario(
-  "say a greeting",
+  "create and access posts",
   async (s, t) => {
-    const [alice] = await s.players([conductorConfig]);
+    
+    const [alice]: Player[] = await s.players([conductorConfig]);
 
-    // install your happs into the coductors and destructuring the returned happ data using the same
-    // array structure as you created in your installation array.
-    const [[alice_common]] = await alice.installAgentsHapps(installation);
-
-    let hash = await alice_common.cells[0].call(
-      "exercise",
-      "say_greeting",
-      {
-        content: "Hello World",
-      }
+    const [[alice_common], [bob_common]] = await alice.installAgentsHapps(
+      installation
     );
-    t.ok(hash);
+
+
+    /**
+     * Test Set 1.
+     *   3 tests.
+     *   Create two entries.
+     *   Find length of Vec<Post> when accessed by two different users.
+     */
+
+    let entry_1 = await alice_common.cells[0].call("exercise", "create_post", {
+      content: "This is entry 1",
+    });
+
+    let entry_2 = await alice_common.cells[0].call("exercise", "create_post", {
+      content: "This is entry 2",
+    });
+
+    t.ok(entry_1);
+    t.ok(entry_2);
+
+    await sleep(100);
+
+    let posts = await alice_common.cells[0].call(
+      "exercise",
+      "get_all_posts",
+      undefined
+    );
+
+    t.equal(posts.length, 2);
+
+    posts = await bob_common.cells[0].call(
+      "exercise",
+      "get_all_posts",
+      undefined
+    );
+
+    t.equal(posts.length, 2);
   }
 );
 
