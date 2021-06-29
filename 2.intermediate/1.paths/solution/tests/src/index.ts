@@ -99,7 +99,7 @@ orchestrator.registerScenario(
         year: date.getUTCFullYear(),
         month: date.getMonth() + 1,
         day: date.getUTCDate(),
-        hour: date.getUTCHours() - 1,
+        hour: (date.getUTCHours() - 1) % 24,
       }
     );
     t.deepEqual(postsByTime, []);
