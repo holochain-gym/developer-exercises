@@ -14,11 +14,6 @@ const installation: InstallAgentsHapps = [
     // happ 0
     [exercise],
   ],
-  // agent 1
-  [
-    // happ 0
-    [exercise],
-  ],
 ];
 
 const sleep = (ms) =>
@@ -35,9 +30,12 @@ orchestrator.registerScenario(
 
     // install your happs into the coductors and destructuring the returned happ data using the same
     // array structure as you created in your installation array.
-    const [[alice_common], [bob_common]] = await alice.installAgentsHapps(
-      installation
-    );
+
+    const [[alice_common]] = await alice.installAgentsHapps(installation);
+
+    await sleep(2000);
+
+    const [[bob_common]] = await alice.installAgentsHapps(installation);
 
     let elements = await alice_common.cells[0].call(
       "exercise",
@@ -53,11 +51,11 @@ orchestrator.registerScenario(
     );
     t.equal(elements.length, 4);
 
-    await sleep(1000);
-    
+    await sleep(2000);
+
     const start = millisToTimestamp(Date.now());
 
-    await sleep(1000);
+    await sleep(2000);
 
     // <add snacking log: >"april 2: lemon pie"
     await alice_common.cells[0].call(
@@ -80,7 +78,11 @@ orchestrator.registerScenario(
     );
     t.equal(elements.length, 6);
 
-    elements = await bob_common.cells[0].call("exercise", "query_all_elements", null);
+    elements = await bob_common.cells[0].call(
+      "exercise",
+      "query_all_elements",
+      null
+    );
     t.equal(elements.length, 4);
 
     elements = await alice_common.cells[0].call(
@@ -89,7 +91,7 @@ orchestrator.registerScenario(
       null
     );
     t.equal(elements.length, 2);
-    t.ok(elements[0].entry.Present)
+    t.ok(elements[0].entry.Present);
 
     elements = await bob_common.cells[0].call(
       "exercise",
@@ -111,11 +113,11 @@ orchestrator.registerScenario(
     );
     t.equal(elements.length, 1);
 
-    await sleep(1000);
-    
+    await sleep(2000);
+
     const middle = millisToTimestamp(Date.now());
 
-    await sleep(1000);
+    await sleep(2000);
 
     await bob_common.cells[0].call(
       "exercise",
@@ -128,11 +130,11 @@ orchestrator.registerScenario(
       "april 2: lemon pie"
     );
 
-    await sleep(1000);
-    
+    await sleep(2000);
+
     const end = millisToTimestamp(Date.now());
-    
-    await sleep(1000);
+
+    await sleep(2000);
     await bob_common.cells[0].call(
       "exercise",
       "register_snacking",

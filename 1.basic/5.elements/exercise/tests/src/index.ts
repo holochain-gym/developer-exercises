@@ -13,13 +13,7 @@ const installation: InstallAgentsHapps = [
   [
     // happ 0
     [exercise],
-  ],
-  // agent 1
-  [
-    // happ 0
-    [exercise],
-  ],
-];
+  ],];
 
 const sleep = (ms) =>
   new Promise((resolve) => setTimeout(() => resolve(null), ms));
@@ -33,7 +27,11 @@ orchestrator.registerScenario(
 
     // install your happs into the coductors and destructuring the returned happ data using the same
     // array structure as you created in your installation array.
-    const [[alice_common], [bob_common]] = await alice.installAgentsHapps(installation);
+    const [[alice_common]] = await alice.installAgentsHapps(installation);
+
+    await sleep(2000);
+
+    const [[bob_common]] = await alice.installAgentsHapps(installation);
 
     // <add snacking log: >"april 2: lemon pie"
     let headerAndEntryHash = await alice_common.cells[0].call(

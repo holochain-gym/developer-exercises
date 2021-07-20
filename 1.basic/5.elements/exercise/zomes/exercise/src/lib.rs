@@ -6,7 +6,7 @@ entry_defs![SnackingLog::entry_def()];
 pub struct SnackingLog(String);
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct HeaderAndEntryHash{
+pub struct HeaderAndEntryHash {
     entry_hash: EntryHash,
     header_hash: HeaderHash,
 }
@@ -28,5 +28,5 @@ pub fn get_by_entry_hash(entry_hash: EntryHash) -> ExternResult<SnackingLog> {
 
 #[hdk_extern]
 pub fn get_all_headers_from_content(input: SnackingLog) -> ExternResult<Vec<SignedHeaderHashed>> {
-        unimplemented!()
+    unimplemented!()
 }

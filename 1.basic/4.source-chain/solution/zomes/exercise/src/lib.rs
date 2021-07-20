@@ -18,11 +18,13 @@ pub fn query_all_elements(_: ()) -> ExternResult<Vec<Element>> {
 
 #[hdk_extern]
 pub fn query_snackings(_: ()) -> ExternResult<Vec<Element>> {
-    let filter = ChainQueryFilter::new().include_entries(true).entry_type(EntryType::App(AppEntryType::new(
-        entry_def_index!(SnackingLog)?,
-        zome_info()?.zome_id,
-        EntryVisibility::Public,
-    )));
+    let filter = ChainQueryFilter::new()
+        .include_entries(true)
+        .entry_type(EntryType::App(AppEntryType::new(
+            entry_def_index!(SnackingLog)?,
+            zome_info()?.zome_id,
+            EntryVisibility::Public,
+        )));
 
     query(filter)
 }

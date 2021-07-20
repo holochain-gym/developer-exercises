@@ -1,5 +1,5 @@
+use hdk::prelude::holo_hash::HeaderHashB64;
 use hdk::prelude::*;
-use holo_hash::HeaderHashB64;
 
 entry_defs![Estimate::entry_def()];
 
@@ -21,16 +21,20 @@ fn validate(validation_data: ValidateData) -> ExternResult<ValidateCallbackResul
     let estimate_option: Option<Estimate> = element.entry().to_app_option()?;
     match estimate_option {
         None => {
-            return Ok(ValidateCallbackResult::Invalid("Empty estimate not allowed".to_string()))
+            return Ok(ValidateCallbackResult::Invalid(
+                "Empty estimate not allowed".to_string(),
+            ))
         }
         Some(x) => {
             let e: Estimate = Some(x).unwrap();
-            let value:u8 = e.value;
-            if is_estimate_invalid(value){
-                return Ok(ValidateCallbackResult::Invalid("No a correct value".to_string()))
+            let value: u8 = e.value;
+            if is_estimate_invalid(value) {
+                return Ok(ValidateCallbackResult::Invalid(
+                    "No a correct value".to_string(),
+                ));
             }
-            return Ok(ValidateCallbackResult::Valid)
-        },
+            return Ok(ValidateCallbackResult::Valid);
+        }
     };
 }
 
@@ -46,15 +50,18 @@ pub fn is_estimate_invalid(input: u8) -> bool {
         Some(x) => {
             println!("some");
             let e: Estimate = Some(x).unwrap();
-            let value:u8 = e.value;
+            let value: u8 = e.value;
             for i in &allowed_estimates {
                 if *i == value {
-                    return false
+                    return false;
                 }
             }
-            return true
-        },
-        None => { println!("none"); return true }
+            return true;
+        }
+        None => {
+            println!("none");
+            return true;
+        }
     };
 }
 

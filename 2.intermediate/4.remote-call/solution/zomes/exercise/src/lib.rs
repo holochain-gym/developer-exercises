@@ -9,7 +9,7 @@ pub struct Post(String);
 #[hdk_extern]
 fn init(_: ()) -> ExternResult<InitCallbackResult> {
     // grant unrestricted access to accept_cap_claim so other agents can send us claims
-    let mut functions: GrantedFunctions = HashSet::new();
+    let mut functions: GrantedFunctions = BTreeSet::new();
     functions.insert((zome_info()?.zome_name, "receive_cap_access".into()));
     create_cap_grant(CapGrantEntry {
         tag: "".into(),
@@ -100,7 +100,7 @@ pub struct GrantCapAccess {
 #[hdk_extern]
 pub fn create_cap_access(access: GrantCapAccess) -> ExternResult<GrantCapAccess> {
     //Create function map of cap grant
-    let mut functions: GrantedFunctions = HashSet::new();
+    let mut functions: GrantedFunctions = BTreeSet::new();
     functions.insert((zome_info()?.zome_name, access.function.clone().into()));
 
     //Create the cap grant and commit for current agent

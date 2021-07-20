@@ -14,11 +14,6 @@ const installation: InstallAgentsHapps = [
     // happ 0
     [exercise],
   ],
-  // agent 1
-  [
-    // happ 0
-    [exercise],
-  ],
 ];
 
 const sleep = (ms) =>
@@ -33,13 +28,17 @@ orchestrator.registerScenario(
 
     // install your happs into the coductors and destructuring the returned happ data using the same
     // array structure as you created in your installation array.
-    const [[alice_common], [bob_common]] = await alice.installAgentsHapps(installation);
+    const [[alice_common]] = await alice.installAgentsHapps(installation);
+
+    await sleep(2000);
+
+    const [[bob_common]] = await alice.installAgentsHapps(installation);
 
     // <add snacking log: >"april 2: lemon pie"
     let headerAndEntryHash = await alice_common.cells[0].call(
       "exercise",
       "register_snacking",
-      "april 2: lemon pie",
+      "april 2: lemon pie"
     );
     let entryHash = headerAndEntryHash.entry_hash;
     let headerHash = headerAndEntryHash.header_hash;
@@ -48,7 +47,7 @@ orchestrator.registerScenario(
     let snackinglog1 = await alice_common.cells[0].call(
       "exercise",
       "get_by_header_hash",
-       headerHash 
+      headerHash
     );
     t.equal(snackinglog1, "april 2: lemon pie");
 
@@ -56,7 +55,7 @@ orchestrator.registerScenario(
     let snackinglog2 = await alice_common.cells[0].call(
       "exercise",
       "get_by_entry_hash",
-        entryHash 
+      entryHash
     );
     t.equal(snackinglog2, "april 2: lemon pie");
 
@@ -66,29 +65,29 @@ orchestrator.registerScenario(
       "get_all_headers_from_content",
       "april 2: lemon pie"
     );
-    t.equal(headers.length, 1);   // or t.deepEqual()    --> compares on content of array, not on identity
+    t.equal(headers.length, 1); // or t.deepEqual()    --> compares on content of array, not on identity
 
     await bob_common.cells[0].call(
       "exercise",
       "register_snacking",
-      "april 2: lemon pie",
+      "april 2: lemon pie"
     );
 
-    await sleep(100);
+    await sleep(500);
 
     headers = await alice_common.cells[0].call(
       "exercise",
       "get_all_headers_from_content",
       "april 2: lemon pie"
     );
-    t.equal(headers.length, 2);  
+    t.equal(headers.length, 2);
 
     headers = await alice_common.cells[0].call(
       "exercise",
       "get_all_headers_from_content",
       "april 2: lemon pie3"
     );
-    t.equal(headers.length, 0);  
+    t.equal(headers.length, 0);
   }
 );
 

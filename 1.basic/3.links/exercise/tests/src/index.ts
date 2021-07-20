@@ -19,10 +19,6 @@ const installation: InstallAgentsHapps = [
     // happ 0
     [exercise],
   ],
-  [
-    // happ 0
-    [exercise],
-  ],
 ];
 
 const sleep = (ms) =>
@@ -35,9 +31,11 @@ orchestrator.registerScenario(
   async (s, t) => {
     const [alice]: Player[] = await s.players([conductorConfig]);
 
-    const [[alice_common], [bob_common]] = await alice.installAgentsHapps(
-      installation
-    );
+    const [[alice_common]] = await alice.installAgentsHapps(installation);
+
+    await sleep(2000);
+
+    const [[bob_common]] = await alice.installAgentsHapps(installation);
 
     const alicePubKey = alice_common.cells[0].cellId[1];
     const bobPubKey = bob_common.cells[0].cellId[1];

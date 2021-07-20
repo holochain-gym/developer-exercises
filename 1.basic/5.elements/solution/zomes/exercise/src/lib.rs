@@ -1,5 +1,5 @@
 use hdk::prelude::*;
-use holo_hash::{HeaderHashB64, EntryHashB64};
+use hdk::prelude::holo_hash::{EntryHashB64, HeaderHashB64};
 
 entry_defs![SnackingLog::entry_def()];
 
@@ -7,7 +7,7 @@ entry_defs![SnackingLog::entry_def()];
 pub struct SnackingLog(String);
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct HeaderAndEntryHash{
+pub struct HeaderAndEntryHash {
     entry_hash: EntryHashB64,
     header_hash: HeaderHashB64,
 }
@@ -25,22 +25,24 @@ pub fn register_snacking(input: SnackingLog) -> ExternResult<HeaderAndEntryHash>
 
 #[hdk_extern]
 pub fn get_by_header_hash(header_hash: HeaderHashB64) -> ExternResult<SnackingLog> {
-    let element: Element = get(HeaderHash::from(header_hash), GetOptions::default())?
-        .ok_or(WasmError::Guest(String::from("Could not find SnackingLog for header hash")))?;
+    let element: Element = get(HeaderHash::from(header_hash), GetOptions::default())?.ok_or(
+        WasmError::Guest(String::from("Could not find SnackingLog for header hash")),
+    )?;
     let option: Option<SnackingLog> = element.entry().to_app_option()?;
-    let snack_log: SnackingLog = option
-        .ok_or(WasmError::Guest(String::from("No book inside option")))?;
+    let snack_log: SnackingLog =
+        option.ok_or(WasmError::Guest(String::from("No book inside option")))?;
 
     Ok(snack_log)
 }
 
 #[hdk_extern]
 pub fn get_by_entry_hash(entry_hash: EntryHashB64) -> ExternResult<SnackingLog> {
-    let element: Element = get(EntryHash::from(entry_hash), GetOptions::default())?
-        .ok_or(WasmError::Guest(String::from("Could not find SnackingLog for header hash")))?;
+    let element: Element = get(EntryHash::from(entry_hash), GetOptions::default())?.ok_or(
+        WasmError::Guest(String::from("Could not find SnackingLog for header hash")),
+    )?;
     let option: Option<SnackingLog> = element.entry().to_app_option()?;
-    let snack_log: SnackingLog = option
-        .ok_or(WasmError::Guest(String::from("No book inside option")))?;
+    let snack_log: SnackingLog =
+        option.ok_or(WasmError::Guest(String::from("No book inside option")))?;
 
     Ok(snack_log)
 }
@@ -49,12 +51,12 @@ pub fn get_by_entry_hash(entry_hash: EntryHashB64) -> ExternResult<SnackingLog> 
 pub fn get_all_headers_from_content(input: SnackingLog) -> ExternResult<Vec<SignedHeaderHashed>> {
     let hash: EntryHash = hash_entry(&input)?;
     let details = get_details(hash, GetOptions::default())?;
-        
+
     match details {
-        Some(Details::Entry(entry_details)) => {
-            Ok(entry_details.headers)
-        },
+        Some(Details::Entry(entry_details)) => Ok(entry_details.headers),
         None => Ok(vec![]),
-        _ => Err(WasmError::Guest(String::from("Could not find SnackingLog based on content")))
+        _ => Err(WasmError::Guest(String::from(
+            "Could not find SnackingLog based on content",
+        ))),
     }
 }

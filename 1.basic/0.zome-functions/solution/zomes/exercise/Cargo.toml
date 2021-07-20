@@ -10,4 +10,4 @@ name = "exercise"
 
 [dependencies]
 serde = "1"
-hdk = "0.0.100"
+hdk = "0.0.101"

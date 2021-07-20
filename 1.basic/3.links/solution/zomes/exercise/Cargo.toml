@@ -12,6 +12,5 @@ name = "exercise"
 derive_more = "0"
 serde = "1"
 
-holo_hash = "0.0.2-alpha"
-hdk = "0.0.100"
+hdk = "0.0.101"
 chrono = "0.4.19"

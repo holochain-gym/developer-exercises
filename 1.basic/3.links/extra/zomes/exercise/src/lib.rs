@@ -23,7 +23,7 @@ pub fn create_author(external_data: Author) -> ExternResult<EntryHash> {
     create_entry(&author)?;
     let author_entry_hash: EntryHash = hash_entry(&author)?;
 
-    Ok(author_entry_hash)  // is the same as:   EntryHashB64::from(author_entry_hash)
+    Ok(author_entry_hash) // is the same as:   EntryHashB64::from(author_entry_hash)
 }
 
 #[hdk_extern]
@@ -40,23 +40,18 @@ pub fn create_post(external_data: Post) -> ExternResult<EntryHash> {
 
 #[hdk_extern]
 pub fn link_author_to_post(external_data: LinkInput) -> ExternResult<HeaderHash> {
+    let author_hash: EntryHash = external_data.author_entry_hash;
+    let post_hash: EntryHash = external_data.post_entry_hash;
 
-    let author_hash:EntryHash = external_data.author_entry_hash;
-    let post_hash:EntryHash = external_data.post_entry_hash;
-    
     let link_tag: LinkTag = LinkTag::new(String::from("is_author"));
 
-    let link_hash: HeaderHash = create_link(
-        author_hash,
-        post_hash,
-        link_tag,
-    )?;
+    let link_hash: HeaderHash = create_link(author_hash, post_hash, link_tag)?;
 
     Ok(link_hash)
 }
 
 #[hdk_extern]
-pub fn get_link_header(external_data:HeaderHash) -> ExternResult<Header>{
+pub fn get_link_header(external_data: HeaderHash) -> ExternResult<Header> {
     let link_header_hash: HeaderHash = external_data;
     // used by test to validate if link was created correctly
     let element: Element = get(link_header_hash, GetOptions::default())?
@@ -74,9 +69,9 @@ pub fn get_posts_for_author(author_entry_hash: EntryHash) -> ExternResult<Vec<Po
     // unimplemented!()
     // get all the links for the author
     // return all posts as a collection
-    
+
     let links: Links = get_links(author_entry_hash, None)?;
-    
+
     let mut content: Vec<Post> = Vec::new();
     for l in links.into_inner() {
         content.push(_return_content(l)?);
@@ -94,8 +89,6 @@ fn _return_content(link: Link) -> ExternResult<Post> {
     Ok(entry)
 }
 
-
-
 // EXTRA
 // create comment and link immediately to post
 
@@ -110,25 +103,21 @@ pub struct Comment(String);
 
 // converts string to comment; implementing this automaticly provide .into()
 impl From<String> for Comment {
-    fn from(s:String)->Self{
-        Comment{0:s}
+    fn from(s: String) -> Self {
+        Comment { 0: s }
     }
 }
 
 #[hdk_extern]
 pub fn comment_on_post(external_data: PostCommentInput) -> ExternResult<HeaderHash> {
-    let post_entry_hash:EntryHash = external_data.post_entry_hash;
-    let comment:Comment = external_data.comment.into();
+    let post_entry_hash: EntryHash = external_data.post_entry_hash;
+    let comment: Comment = external_data.comment.into();
 
     create_entry(&comment)?;
     let comment_entry_hash: EntryHash = hash_entry(&comment)?;
 
     let link_tag: LinkTag = LinkTag::new(String::from("has_comment"));
-    let link_hash: HeaderHash = create_link(
-        post_entry_hash,
-        comment_entry_hash,
-        link_tag,
-    )?;
+    let link_hash: HeaderHash = create_link(post_entry_hash, comment_entry_hash, link_tag)?;
 
     Ok(link_hash)
 }
