@@ -7,6 +7,17 @@ if [[ -z $IN_NIX_SHELL ]]; then
     exit 1
 fi
 
+HC_VERSION=$(hn-introspect | grep holochain:)
+CORRECT_HC_VERSION="- holochain: https://github.com/holochain/holochain/archive/6b34b1797042b72aa7ae80364d3616a321924f75.tar.gz"
+
+if [[ $HC_VERSION != $CORRECT_HC_VERSION ]]; then 
+    echo "It looks like you are running in an OLD nix-shell"
+    echo "Go to the base folder of the developer-exercises, "
+    echo "where you find default.nix, "
+    echo "and run 'nix-shell' in the command line."
+    exit 1
+fi
+
 ## in the future add check to see if we are running in the nix-shell for holochain-gym
 #
 # if [[ -z $IN_NIX_SHELL_GYM ]]; then
