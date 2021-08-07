@@ -11,5 +11,5 @@ name = "exercise"
 [dependencies]
 derive_more = "0"
 serde = "1"
-hdk = "0.0.101"
+hdk = "0.0.102"
 chrono = "0.4.19"
