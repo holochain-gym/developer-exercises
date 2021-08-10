@@ -59,7 +59,7 @@ orchestrator.registerScenario(
     t.ok(entry_1);
     t.ok(entry_2);
 
-    await sleep(100);
+    await sleep(2000);
 
     let posts = await alice_common.cells[0].call(
       "exercise",
@@ -97,7 +97,7 @@ orchestrator.registerScenario(
     });
 
     t.ok(entry_3);
-    await sleep(100);
+    await sleep(2000);
 
     let bob_posts = await alice_common.cells[0].call(
       "exercise",
