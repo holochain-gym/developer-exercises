@@ -1,6 +1,10 @@
 import { Orchestrator, Config, InstallAgentsHapps } from "@holochain/tryorama";
 import path from "path";
 
+// Holochain timestamp
+// tuple of [seconds, nanoseconds]
+type Timestamp = [number, number];
+
 const conductorConfig = Config.gen();
 
 // Construct proper paths for your DNAs
@@ -19,7 +23,7 @@ const installation: InstallAgentsHapps = [
 const sleep = (ms) =>
   new Promise((resolve) => setTimeout(() => resolve(null), ms));
 
-const millisToTimestamp = (ms) => [Math.floor(ms / 1000), ms % 1000];
+const millisToTimestamp: (ms: number) => Timestamp = (ms) => [Math.floor(ms / 1000), ms % 1000 * 1000000];
 
 const orchestrator = new Orchestrator();
 
@@ -32,9 +36,6 @@ orchestrator.registerScenario(
     // array structure as you created in your installation array.
 
     const [[alice_common]] = await alice.installAgentsHapps(installation);
-
-    await sleep(2000);
-
     const [[bob_common]] = await alice.installAgentsHapps(installation);
 
     let elements = await alice_common.cells[0].call(
@@ -51,11 +52,7 @@ orchestrator.registerScenario(
     );
     t.equal(elements.length, 4);
 
-    await sleep(2000);
-
     const start = millisToTimestamp(Date.now());
-
-    await sleep(2000);
 
     // <add snacking log: >"april 2: lemon pie"
     await alice_common.cells[0].call(
@@ -113,12 +110,8 @@ orchestrator.registerScenario(
     );
     t.equal(elements.length, 1);
 
-    await sleep(2000);
-
     const middle = millisToTimestamp(Date.now());
 
-    await sleep(2000);
-
     await bob_common.cells[0].call(
       "exercise",
       "register_snacking",
@@ -129,12 +122,9 @@ orchestrator.registerScenario(
       "register_snacking",
       "april 2: lemon pie"
     );
-
-    await sleep(2000);
 
     const end = millisToTimestamp(Date.now());
 
-    await sleep(2000);
     await bob_common.cells[0].call(
       "exercise",
       "register_snacking",
