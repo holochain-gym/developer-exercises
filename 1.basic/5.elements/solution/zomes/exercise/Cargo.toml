@@ -9,8 +9,9 @@ crate-type = ["cdylib", "rlib"]
 name = "exercise"
 
 [dependencies]
+chrono = "0.4.19"
 derive_more = "0"
 serde = "1"
 
-hdk = "0.0.102"
-chrono = "0.4.19"
+hdk = "0.0.107"
+holo_hash = {version = "0.0.7", features = ["encoding"]}

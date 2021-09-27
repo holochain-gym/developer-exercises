@@ -41,11 +41,9 @@ pub fn get_posts_by_tag(tag: String) -> ExternResult<Vec<Post>> {
 /** Helper functions */
 
 fn now_date_time() -> ExternResult<DateTime<Utc>> {
-    let time = sys_time()?;
-
-    let secs = time.as_secs();
+    let time = sys_time()?.as_seconds_and_nanos();
 
     let date: DateTime<Utc> =
-        DateTime::from_utc(NaiveDateTime::from_timestamp(secs as i64, 0), Utc);
+        DateTime::from_utc(NaiveDateTime::from_timestamp(time.0, time.1), Utc);
     Ok(date)
 }
