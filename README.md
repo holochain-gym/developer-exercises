@@ -23,4 +23,4 @@ Go into the root folder of this repository and run:
 nix-shell
 ```
 
-This will take some time, but after that you will have the development environment set up and ready. You can then navigate to each of the exercises to start your workout!
+After this you have the development environment set up and ready. You can then navigate to each of the exercises to start your workout!
