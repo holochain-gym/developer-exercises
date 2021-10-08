@@ -53,7 +53,7 @@ orchestrator.registerScenario("create and access posts", async (s, t) => {
   t.ok(entry_1);
   t.ok(entry_2);
 
-  await sleep(500);
+  await sleep(3000);
 
   let posts = await alice_common.cells[0].call(
     "exercise",

@@ -1,3 +1,4 @@
+use hdk::prelude::holo_hash::{EntryHashB64, HeaderHashB64};
 use hdk::prelude::*;
 
 entry_defs![SnackingLog::entry_def()];
@@ -7,8 +8,8 @@ pub struct SnackingLog(String);
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct HeaderAndEntryHash {
-    entry_hash: EntryHash,
-    header_hash: HeaderHash,
+    entry_hash: EntryHashB64,
+    header_hash: HeaderHashB64,
 }
 
 #[hdk_extern]

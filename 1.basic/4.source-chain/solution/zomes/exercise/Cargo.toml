@@ -12,5 +12,5 @@ name = "exercise"
 derive_more = "0"
 serde = "1"
 
-hdk = "0.0.108"
+hdk = "0.0.109"
 chrono = "0.4.19"

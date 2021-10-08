@@ -1,5 +1,5 @@
-use hdk::prelude::*;
 use hdk::prelude::holo_hash::{EntryHashB64, HeaderHashB64};
+use hdk::prelude::*;
 
 entry_defs![SnackingLog::entry_def()];
 

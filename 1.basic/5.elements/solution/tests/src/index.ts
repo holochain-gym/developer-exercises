@@ -73,7 +73,7 @@ orchestrator.registerScenario(
       "april 2: lemon pie"
     );
 
-    await sleep(500);
+    await sleep(5000);
 
     headers = await alice_common.cells[0].call(
       "exercise",
