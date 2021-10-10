@@ -19,7 +19,7 @@ const installation: InstallAgentsHapps = [
 const sleep = (ms) =>
   new Promise((resolve) => setTimeout(() => resolve(null), ms));
 
-const millisToTimestamp = (ms) => [Math.floor(ms / 1000), ms % 1000];
+const millisToTimestamp = (ms) => ms * 1_000;
 
 const orchestrator = new Orchestrator();
 
