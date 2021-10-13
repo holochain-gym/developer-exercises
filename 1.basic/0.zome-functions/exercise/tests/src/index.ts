@@ -16,9 +16,6 @@ const installation: InstallAgentsHapps = [
   ],
 ];
 
-const sleep = (ms) =>
-  new Promise((resolve) => setTimeout(() => resolve(null), ms));
-
 const orchestrator = new Orchestrator();
 
 orchestrator.registerScenario(
@@ -31,34 +28,22 @@ orchestrator.registerScenario(
     const [[alice_common]] = await alice.installAgentsHapps(installation);
 
     // Hello world
-    let text_hello_world = await alice_common.cells[0].call(
+    const text_hello_world = await alice_common.cells[0].call(
       "exercise",
       "hello_world",
       null
     );
     t.equal(text_hello_world, "Hello world");
 
-    // Say my name
-    let text_name = await alice_common.cells[0].call(
-      "exercise",
-      "say_my_name",
-      {
-        first_name: "Srinivasa",
-        last_name: "Ramanujan",
-      }
-    );
-    console.log(text_name);
-    t.equal(text_name, "Your name is Srinivasa Ramanujan");
-
     // Agent info
-    let agent_info = await alice_common.cells[0].call(
+    const agent_info = await alice_common.cells[0].call(
       "exercise",
       "get_agent_id",
       null
     );
     t.ok(agent_info);
     console.log(agent_info);
-    
+
   }
 );
 
