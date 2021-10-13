@@ -11,7 +11,7 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "@holochain/tryorama": "0.4.5",
     "@msgpack/msgpack": "^2.3.0",
     "@types/lodash": "^4.14.158",
