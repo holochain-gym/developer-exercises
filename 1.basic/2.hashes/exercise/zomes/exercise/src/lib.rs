@@ -1,9 +1,5 @@
-use hdk::prelude::*;
-
-entry_defs![Book::entry_def()];
-
-#[hdk_entry(id = "book")]
-pub struct Book {
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct SomeExternalInput {
     title: String,
     content: String,
 }
