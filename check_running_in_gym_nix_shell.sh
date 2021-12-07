@@ -7,8 +7,8 @@ if [[ -z $IN_NIX_SHELL ]]; then
     exit 1
 fi
 
-HC_VERSION=$(hn-introspect | grep holochain:)
-CORRECT_HC_VERSION="- holochain: https://github.com/holochain/holochain/archive/holochain-0.0.109.tar.gz"
+HC_VERSION=$(hn-introspect | grep holochain-)
+CORRECT_HC_VERSION="- holochain-0.0.118: https://github.com/holochain/holochain/tree/8a0cd9283fd881ddbc467b1d0d97ee2fcd49d992"
 
 if [[ $HC_VERSION != $CORRECT_HC_VERSION ]]; then 
     echo "It looks like you are running in an OLD nix-shell"

@@ -10,7 +10,7 @@ pub struct Post(String);
 fn init(_: ()) -> ExternResult<InitCallbackResult> {
     // grant unrestricted access to accept_cap_claim so other agents can send us claims
     let mut functions: GrantedFunctions = BTreeSet::new();
-    functions.insert((zome_info()?.zome_name, "receive_cap_access".into()));
+    functions.insert((zome_info()?.name, "receive_cap_access".into()));
     create_cap_grant(CapGrantEntry {
         tag: "".into(),
         // empty access converts to unrestricted
@@ -30,22 +30,32 @@ pub struct CreatePostInput {
 #[hdk_extern]
 pub fn create_post(create_input: CreatePostInput) -> ExternResult<CreatePostInput> {
     //Get the cap claim from local private chain
-    let cap_secret = query(ChainQueryFilter::new().entry_type(EntryType::CapClaim).include_entries(true))?
-        .into_iter()
-        .map(|elem| {
-            elem.entry().to_owned().into_option().unwrap().as_cap_claim().expect("Could not get option").to_owned()
-        })
-        .filter(|grant| grant.grantor() == &create_input.target_agent)
-        .collect::<Vec<CapClaim>>()
-        .pop()
-        .ok_or(WasmError::Host(
-            "No cap claim was found for desired target agent".to_string(),
-        ))?;
+    let cap_secret = query(
+        ChainQueryFilter::new()
+            .entry_type(EntryType::CapClaim)
+            .include_entries(true),
+    )?
+    .into_iter()
+    .map(|elem| {
+        elem.entry()
+            .to_owned()
+            .into_option()
+            .unwrap()
+            .as_cap_claim()
+            .expect("Could not get option")
+            .to_owned()
+    })
+    .filter(|grant| grant.grantor() == &create_input.target_agent)
+    .collect::<Vec<CapClaim>>()
+    .pop()
+    .ok_or(WasmError::Host(
+        "No cap claim was found for desired target agent".to_string(),
+    ))?;
 
     //Call remote function of target agent using secret found in cap claim
     call_remote(
         create_input.target_agent.clone(),
-        zome_info()?.zome_name,
+        zome_info()?.name,
         "receive_p2p_message".into(),
         Some(cap_secret.secret().to_owned()),
         Post(create_input.content.clone()),
@@ -63,11 +73,13 @@ pub fn receive_p2p_message(post: Post) -> ExternResult<()> {
 pub fn get_my_posts(_: ()) -> ExternResult<Vec<Post>> {
     let entry_def = Post::entry_def();
     let posts = query(
-        ChainQueryFilter::new().entry_type(EntryType::App(AppEntryType::new(
-            0.into(),
-            zome_info()?.zome_id,
-            entry_def.visibility,
-        ))).include_entries(true),
+        ChainQueryFilter::new()
+            .entry_type(EntryType::App(AppEntryType::new(
+                0.into(),
+                zome_info()?.id,
+                entry_def.visibility,
+            )))
+            .include_entries(true),
     )?
     .into_iter()
     .map(|elem| elem.entry().to_app_option::<Post>().unwrap().unwrap())
@@ -78,7 +90,7 @@ pub fn get_my_posts(_: ()) -> ExternResult<Vec<Post>> {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CapReceive {
     pub cap_secret: CapSecret,
-    pub from_agent: AgentPubKey
+    pub from_agent: AgentPubKey,
 }
 
 #[hdk_extern]
@@ -94,14 +106,14 @@ pub fn receive_cap_access(cap: CapReceive) -> ExternResult<()> {
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct GrantCapAccess {
     pub function: String,
-    pub agent: AgentPubKey
+    pub agent: AgentPubKey,
 }
 
 #[hdk_extern]
 pub fn create_cap_access(access: GrantCapAccess) -> ExternResult<GrantCapAccess> {
     //Create function map of cap grant
     let mut functions: GrantedFunctions = BTreeSet::new();
-    functions.insert((zome_info()?.zome_name, access.function.clone().into()));
+    functions.insert((zome_info()?.name, access.function.clone().into()));
 
     //Create the cap grant and commit for current agent
     let cap_secret = generate_cap_secret()?;
@@ -114,12 +126,12 @@ pub fn create_cap_access(access: GrantCapAccess) -> ExternResult<GrantCapAccess>
     //Call the zome of target agent and give them the generated cap secret
     call_remote(
         access.agent.clone(),
-        zome_info()?.zome_name,
+        zome_info()?.name,
         "receive_cap_access".into(),
         None,
         CapReceive {
             cap_secret: cap_secret,
-            from_agent: agent_info()?.agent_initial_pubkey
+            from_agent: agent_info()?.agent_initial_pubkey,
         },
     )?;
     Ok(access)

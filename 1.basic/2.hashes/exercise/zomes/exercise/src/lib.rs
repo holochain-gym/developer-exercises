@@ -1,3 +1,7 @@
+use hdk::prelude::*;
+
+entry_defs![];
+
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct SomeExternalInput {
     title: String,
@@ -5,7 +9,7 @@ pub struct SomeExternalInput {
 }
 
 #[hdk_extern]
-pub fn add_book(external_input: Book) -> ExternResult<EntryHash> { 
+pub fn add_book(external_input: SomeExternalInput) -> ExternResult<EntryHash> { 
     unimplemented!()
 }
 

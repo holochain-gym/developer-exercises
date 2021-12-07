@@ -31,9 +31,9 @@ pub fn get_all_posts(_: ()) -> ExternResult<Vec<Post>> {
     let anchor = anchor(POST_ANCHOR_TYPE.into(), POST_ANCHOR_TEXT.into())?;
     let mut content: Vec<Post> = Vec::new();
 
-    let links: Links = get_links(anchor.into_hash(), None)?;
+    let links = get_links(anchor.into_hash(), None)?;
 
-    for l in links.into_inner() {
+    for l in links {
         content.push(_return_content(l)?);
     }
 

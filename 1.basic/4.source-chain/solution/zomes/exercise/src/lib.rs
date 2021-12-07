@@ -22,7 +22,7 @@ pub fn query_snackings(_: ()) -> ExternResult<Vec<Element>> {
         .include_entries(true)
         .entry_type(EntryType::App(AppEntryType::new(
             entry_def_index!(SnackingLog)?,
-            zome_info()?.zome_id,
+            zome_info()?.id,
             EntryVisibility::Public,
         )));
 

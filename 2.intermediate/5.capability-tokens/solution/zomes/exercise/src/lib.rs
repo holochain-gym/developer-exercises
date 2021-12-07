@@ -6,7 +6,7 @@ entry_defs![];
 fn init(_: ()) -> ExternResult<InitCallbackResult> {
     // grant unrestricted access to accept_cap_claim so other agents can send us claims
     let mut functions: GrantedFunctions = BTreeSet::new();
-    functions.insert((zome_info()?.zome_name, "receive_cap_access".into()));
+    functions.insert((zome_info()?.name, "receive_cap_access".into()));
     create_cap_grant(CapGrantEntry {
         tag: "".into(),
         // empty access converts to unrestricted
@@ -57,7 +57,7 @@ pub fn create_transferable_cap_access(access: GrantCapAccess) -> ExternResult<Gr
     debug!("Sending cap to: {:#?}", access.agent);
     //Create function map of cap grant
     let mut functions: GrantedFunctions = BTreeSet::new();
-    functions.insert((zome_info()?.zome_name, access.function.clone().into()));
+    functions.insert((zome_info()?.name, access.function.clone().into()));
 
     //Create the cap grant and commit for current agent
     let cap_secret = generate_cap_secret()?;
@@ -70,7 +70,7 @@ pub fn create_transferable_cap_access(access: GrantCapAccess) -> ExternResult<Gr
     //Call the zome of target agent and give them the generated cap secret
     call_remote(
         access.agent.clone(),
-        zome_info()?.zome_name,
+        zome_info()?.name,
         "receive_cap_access".into(),
         None,
         CapReceive {
@@ -85,7 +85,7 @@ pub fn create_transferable_cap_access(access: GrantCapAccess) -> ExternResult<Gr
 pub fn create_assigned_cap_access(access: GrantCapAccess) -> ExternResult<GrantCapAccess> {
     //Create function map of cap grant
     let mut functions: GrantedFunctions = BTreeSet::new();
-    functions.insert((zome_info()?.zome_name, access.function.clone().into()));
+    functions.insert((zome_info()?.name, access.function.clone().into()));
 
     //Create the cap grant and commit for current agent
     let cap_secret = generate_cap_secret()?;
@@ -98,7 +98,7 @@ pub fn create_assigned_cap_access(access: GrantCapAccess) -> ExternResult<GrantC
     //Call the zome of target agent and give them the generated cap secret
     call_remote(
         access.agent.clone(),
-        zome_info()?.zome_name,
+        zome_info()?.name,
         "receive_cap_access".into(),
         None,
         CapReceive {

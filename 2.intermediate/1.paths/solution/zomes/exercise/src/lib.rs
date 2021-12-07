@@ -70,7 +70,6 @@ pub fn get_all_tags(_: ()) -> ExternResult<Vec<String>> {
     let links = path.children()?;
 
     let tags = links
-        .into_inner()
         .into_iter()
         .map(|child_link| get_last_component_string(child_link.tag))
         .collect::<ExternResult<Vec<String>>>()?;
@@ -85,7 +84,6 @@ pub fn get_posts_by_tag(tag: String) -> ExternResult<Vec<Post>> {
     let links = get_links(path.hash()?, None)?;
 
     let posts: Vec<Post> = links
-        .into_inner()
         .into_iter()
         .map(|link| get_post_by_hash(link.target))
         .collect::<ExternResult<Vec<Post>>>()?;

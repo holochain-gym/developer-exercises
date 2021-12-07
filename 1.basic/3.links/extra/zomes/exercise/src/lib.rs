@@ -70,10 +70,10 @@ pub fn get_posts_for_author(author_entry_hash: EntryHash) -> ExternResult<Vec<Po
     // get all the links for the author
     // return all posts as a collection
 
-    let links: Links = get_links(author_entry_hash, None)?;
+    let links: Vec<Link> = get_links(author_entry_hash, None)?;
 
     let mut content: Vec<Post> = Vec::new();
-    for l in links.into_inner() {
+    for l in links {
         content.push(_return_content(l)?);
     }
 

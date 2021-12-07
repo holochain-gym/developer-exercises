@@ -48,9 +48,9 @@ pub fn create_post(external_data: CreatePostInput) -> ExternResult<EntryHash> {
 pub fn get_posts_for_agent(agent_pubkey: AgentPubKey) -> ExternResult<Vec<Post>> {
     let mut content: Vec<Post> = Vec::new();
 
-    let links: Links = get_links(agent_pubkey.into(), None)?;
+    let links = get_links(agent_pubkey.into(), None)?;
 
-    for l in links.into_inner() {
+    for l in links {
         content.push(_return_content(l)?);
     }
 

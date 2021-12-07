@@ -12,4 +12,4 @@ name = "exercise"
 derive_more = "0"
 serde = "1"
 
-hdk = "0.0.109"
+hdk = "0.0.115"

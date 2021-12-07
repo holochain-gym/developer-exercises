@@ -12,7 +12,6 @@ pub fn get_posts_by_day(input: GetPostsByTimeInput) -> ExternResult<Vec<Post>> {
     let children = path.children()?;
 
     let posts = children
-        .into_inner()
         .into_iter()
         .map(|hour_link| {
             let hour_str = get_last_component_string(hour_link.tag)?;
@@ -40,7 +39,6 @@ pub fn get_posts_by_hour(
     let links = get_links(path.hash()?, None)?;
 
     let posts: Vec<Post> = links
-        .into_inner()
         .into_iter()
         .map(|link| get_post_by_hash(link.target))
         .collect::<ExternResult<Vec<Post>>>()?;
