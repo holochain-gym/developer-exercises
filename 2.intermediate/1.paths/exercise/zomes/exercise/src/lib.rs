@@ -24,7 +24,7 @@ pub struct GetPostsByTimeInput {
     hour: Option<usize>,
 }
 #[hdk_extern]
-pub fn get_post_by_time(input: GetPostsByTimeInput) -> ExternResult<Vec<Post>> {
+pub fn get_posts_by_time(input: GetPostsByTimeInput) -> ExternResult<Vec<Post>> {
     unimplemented!()
 }
 
