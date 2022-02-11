@@ -16,9 +16,6 @@ const installation: InstallAgentsHapps = [
   ],
 ];
 
-const sleep = (ms) =>
-  new Promise((resolve) => setTimeout(() => resolve(null), ms));
-
 const orchestrator = new Orchestrator();
 
 orchestrator.registerScenario(
@@ -30,17 +27,18 @@ orchestrator.registerScenario(
     // array structure as you created in your installation array.
     const [[alice_common]] = await alice.installAgentsHapps(installation);
 
-    let entryHash = await alice_common.cells[0].call(
+    const book = {
+      title: "Sovereign Accountable Commons",
+      content: "A Sovereign Accountable Commons (SAC) is akin to idea of a Decentralized Autonomous Organizations (DAO) on Ethereum but the underlying technology is fundamentally different, as SACs are built on Ceptr and Holochain. http://ceptr.org/projects/sovereign",
+    };
+
+    let entryHash: Buffer = await alice_common.cells[0].call(
       "exercise",
       "add_book",
-      {
-        title: "Sovereign Accountable Commons",
-        content: "A Sovereign Accountable Commons (SAC) is akin to idea of a Decentralized Autonomous Organizations (DAO) on Ethereum but the underlying technology is fundamentally different, as SACs are built on Ceptr and Holochain. http://ceptr.org/projects/sovereign",
-      }
+      book
     );
 
     t.ok(entryHash, "test add book");
-
   }
 );
 
