@@ -26,5 +26,5 @@ Then you can build with:
 ```bash
 cd tests
 npm install
-npm tests
+npm test
 ```

@@ -30,14 +30,5 @@ Then you can build with:
 ```bash
 cd test
 npm install
-<<<<<<< ours
-npm tests
-=======
-<<<<<<< ours:intermediate/3.remote-call/README.md
-npm tests
-```
-=======
 npm test
->>>>>>> theirs
 ```
->>>>>>> theirs:intermediate/2.remote-call/README.md
