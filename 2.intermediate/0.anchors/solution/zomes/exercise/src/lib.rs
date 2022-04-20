@@ -13,15 +13,30 @@ pub struct SomeExternalInput {
     content: String,
 }
 
+pub enum PostsLinkType {
+    AnchorToPost = 1,
+}
+
+impl Into<LinkType> for PostsLinkType {
+    fn into(self) -> LinkType {
+        LinkType::new(self as u8)
+    }
+}
+
 #[hdk_extern]
 pub fn create_post(input: SomeExternalInput) -> ExternResult<HeaderHash> {
     let anchor = anchor(POST_ANCHOR_TYPE.into(), POST_ANCHOR_TEXT.into())?;
-    
+
     let post: Post = Post(input.content);
 
     let post_header = create_entry(&post)?;
     let post_entry = hash_entry(&post)?;
-    create_link(anchor.into_hash(), post_entry, ())?;
+    create_link(
+        anchor.into_hash().into(),
+        post_entry.into(),
+        PostsLinkType::AnchorToPost,
+        (),
+    )?;
 
     Ok(post_header)
 }
@@ -31,7 +46,7 @@ pub fn get_all_posts(_: ()) -> ExternResult<Vec<Post>> {
     let anchor = anchor(POST_ANCHOR_TYPE.into(), POST_ANCHOR_TEXT.into())?;
     let mut content: Vec<Post> = Vec::new();
 
-    let links = get_links(anchor.into_hash(), None)?;
+    let links = get_links(anchor.into_hash().into(), None)?;
 
     for l in links {
         content.push(_return_content(l)?);

@@ -16,26 +16,45 @@ fn add_estimate(external_estimate: Estimate) -> ExternResult<HeaderHashB64> {
 }
 
 #[hdk_extern]
-fn validate(validation_data: ValidateData) -> ExternResult<ValidateCallbackResult> {
-    let element: Element = validation_data.element;
-    let estimate_option: Option<Estimate> = element.entry().to_app_option()?;
-    match estimate_option {
-        None => {
-            return Ok(ValidateCallbackResult::Invalid(
-                "Empty estimate not allowed".to_string(),
-            ))
-        }
-        Some(x) => {
-            let e: Estimate = Some(x).unwrap();
-            let value: u8 = e.value;
-            if is_estimate_invalid(value) {
-                return Ok(ValidateCallbackResult::Invalid(
-                    "No a correct value".to_string(),
-                ));
+fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
+    match op {
+        Op::StoreEntry {
+            header:
+                SignedHashed {
+                    hashed:
+                        HoloHashed {
+                            content: header, ..
+                        },
+                    ..
+                },
+            entry,
+        } => match header.app_entry_type() {
+            Some(app_entry_type) => {
+                let this_zome = zome_info()?;
+                let matches_entry_def =
+                    this_zome.matches_entry_def_id(app_entry_type, Estimate::entry_def_id());
+
+                if matches_entry_def {
+                    let estimate = Estimate::try_from(&entry)?;
+
+                    let value: u8 = estimate.value;
+                    if is_estimate_invalid(value) {
+                        return Ok(ValidateCallbackResult::Invalid(
+                            "No a correct value".to_string(),
+                        ));
+                    }
+                    return Ok(ValidateCallbackResult::Valid);
+                } else {
+                    Ok(ValidateCallbackResult::Invalid(format!(
+                        "Not a Estimate but a {:?}",
+                        header.entry_type()
+                    )))
+                }
             }
-            return Ok(ValidateCallbackResult::Valid);
-        }
-    };
+            None => Ok(ValidateCallbackResult::Valid),
+        },
+        _ => Ok(ValidateCallbackResult::Valid),
+    }
 }
 
 pub fn is_estimate_invalid(input: u8) -> bool {
