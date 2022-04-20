@@ -1,13 +1,12 @@
 {
-  "name": "validation-tests-solution",
+  "name": "6.validation-solution",
   "version": "0.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npm run check-nix && npm run build && npm run pack && TRYORAMA_LOG_LEVEL=info RUST_LOG=error WASM_LOG=warn RUST_BACKTRACE=1 TRYORAMA_HOLOCHAIN_PATH=\"holochain\" ts-node src/index.ts",
-    "check-nix": "./../../../../check_running_in_gym_nix_shell.sh",
-    "build": "cd .. && CARGO_TARGET_DIR=target cargo build --release --target wasm32-unknown-unknown",
-    "pack": "hc dna pack ../workdir"
+    "test": "npm run build && npm run pack && TRYORAMA_LOG_LEVEL=info RUST_LOG=error WASM_LOG=warn RUST_BACKTRACE=1 TRYORAMA_HOLOCHAIN_PATH=\"holochain\" ts-node src/index.ts",
+    
+    "build": "cd ../zomes/exercise && cargo build --release --target wasm32-unknown-unknown",    "pack": "hc dna pack ../workdir"
   },
   "author": "",
   "license": "ISC",

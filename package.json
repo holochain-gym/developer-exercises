@@ -1,6 +1,7 @@
 {
   "name": "developer-exercises",
   "workspaces": [
-    "1.basic/*/exercise/tests"
+    "1.basic/*/exercise/tests",
+    "1.basic/*/solution/tests"
   ]
 }
