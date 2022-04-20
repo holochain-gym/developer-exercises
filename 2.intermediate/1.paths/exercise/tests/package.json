@@ -1,5 +1,5 @@
 {
-  "name": "demo-1",
+  "name": "paths-tests",
   "version": "0.0.0",
   "description": "",
   "main": "index.js",
@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@holochain/tryorama": "0.4.6",
+    "@holochain/tryorama": "0.4.10",
     "@msgpack/msgpack": "^2.3.0",
     "@types/lodash": "^4.14.158",
     "@types/node": "^14.0.14",

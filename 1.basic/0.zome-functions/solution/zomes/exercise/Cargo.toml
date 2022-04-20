@@ -1,13 +1,13 @@
 [package]
 authors = ["guillem.cordoba@gmail.com", "tim@pragmaticmind.com"]
 edition = "2018"
-name = "exercise"
+name = "zome_functions_solution"
 version = "0.0.1"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
-name = "exercise"
+name = "zome_functions_solution"
 
 [dependencies]
 serde = "1"
-hdk = "0.0.115"
+hdk = { version = "0.0.129", features = ["encoding"] }

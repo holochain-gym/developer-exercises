@@ -1,0 +1,6 @@
+{
+  "name": "developer-exercises",
+  "workspaces": [
+    "1.basic/*/exercise/tests"
+  ]
+}

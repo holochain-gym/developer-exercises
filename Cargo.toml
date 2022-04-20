@@ -1,0 +1,7 @@
+[workspace]
+members = [
+  "1.basic/*/exercise/zomes/*",
+  "1.basic/*/solution/zomes/*",
+  "2.intermediate/*/exercise/zomes/*",
+  "2.intermediate/*/solution/zomes/*", #  "3.advanced/*/exercise",  # "3.advanced/*/solution/zomes/*",
+]

@@ -1,16 +1,16 @@
 [package]
 authors = ["_Pyramid", "pyramid-songs@protonmail.com"]
 edition = "2018"
-name = "links-exercise"
+name = "links_solution"
 version = "0.0.1"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
-name = "exercise"
+name = "links_solution"
 
 [dependencies]
 derive_more = "0"
 serde = "1"
 
-hdk = "0.0.115"
+hdk = { version = "0.0.129", features = ["encoding"] }
 chrono = "0.4.19"
