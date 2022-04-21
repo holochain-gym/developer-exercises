@@ -59,10 +59,9 @@ pub fn err(reason: &str) -> WasmError {
 }
 
 pub fn get_last_component_string(path_tag: LinkTag) -> ExternResult<String> {
-    let hour_path = PathEntry::try_from(&path_tag)?;
-    let hour_components: Vec<Component> = hour_path.into();
+    let bytes = SerializedBytes::from(UnsafeBytes::from(path_tag.0));
 
-    let hour_bytes: &Component = hour_components.last().ok_or(err("Invalid path"))?;
+    let hour_bytes = &Component::try_from(bytes)?;
     let hour_str: String = hour_bytes.try_into()?;
 
     Ok(hour_str)
