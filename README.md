@@ -21,6 +21,7 @@ Go into the root folder of this repository and run:
 
 ```bash
 nix-shell
+npm install
 ```
 
 After this you have the development environment set up and ready. You can then navigate to each of the exercises to start your workout!
