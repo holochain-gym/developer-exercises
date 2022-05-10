@@ -77,10 +77,7 @@ fn validate_entry(entry: Entry) -> ExternResult<ValidateCallbackResult>  {
 /// Return true iff the estimate has a valid value
 pub fn validate_estimate(estimate: Estimate) -> Result<(), String> {
     let valid_estimate_values = vec![0, 1, 2, 3, 5, 8, 13, 20];
-    if !valid_estimate_values.contains(&estimate.value) {
-        return Err(format!("{} is not a valid Estimate value", estimate.value))
-    }
-    Ok(())
+    unimplemented!()
 }
 
 #[cfg(test)]
