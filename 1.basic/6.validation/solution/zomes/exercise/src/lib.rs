@@ -26,13 +26,16 @@ fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
             },
             entry,
         } => validate_entry_creation(header, entry),
+
         Op::StoreElement {
             element: Element {
                 entry: element_entry,
                 ..
             }
         } => validate_element_entry(element_entry),
+
         Op::RegisterAgentActivity {..} => Ok(ValidateCallbackResult::Valid),
+
         _ => Ok(ValidateCallbackResult::Invalid(format!(
             "Unsupported op: {:?}",
             op
@@ -43,20 +46,28 @@ fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
 fn validate_element_entry(element_entry: ElementEntry) -> ExternResult<ValidateCallbackResult> {
     match element_entry {
         ElementEntry::Present(entry) => validate_entry(entry),
-        _ => Ok(ValidateCallbackResult::Valid)
+        // If there is no element, then we have nothing to validate.
+        ElementEntry::NotApplicable => Ok(ValidateCallbackResult::Valid),
+        // It's good to be explicit about what is allowed on the chain and what is not.
+        // If you have a catch-all, often it's good to make this an invalid validation result
+        // so that you are explicit about what your chain accepts. If your chain accidentally
+        // rejects valid data, that would not be good, but it could be recovered with an update.
+        // If your chain accepts invalid data, that will be more difficult to remove later.
+        _ => Ok(ValidateCallbackResult::Invalid(format!("Unsupported element_entry {:?}", element_entry)))
     }
 }
 
 fn validate_entry_creation(header: EntryCreationHeader, entry: Entry) -> ExternResult<ValidateCallbackResult> {
     let app_entry_type = match header.app_entry_type() {
         Some(app_entry_type) => app_entry_type,
-        None => return Ok(ValidateCallbackResult::Invalid("Missing app_entry_type".to_string())),
+        None => return Ok(ValidateCallbackResult::Invalid(format!(
+            "EntryCreationHeader is Missing app_entry_type: {:?}", header))),
     };
     let this_zome = zome_info()?;
     if !this_zome.matches_entry_def_id(app_entry_type, Estimate::entry_def_id()) {
         return Ok(ValidateCallbackResult::Invalid(format!(
             "Unsupported entry type for creation: {:?}",
-            header.entry_type()
+            app_entry_type
         )))
     }
     validate_entry(entry)
@@ -71,14 +82,18 @@ fn validate_entry(entry: Entry) -> ExternResult<ValidateCallbackResult>  {
         _ => (),
     }
 
+    // Only if we pass all validation checks is the entry valid.
     Ok(ValidateCallbackResult::Valid)
 }
 
 /// Return true iff the estimate has a valid value
 pub fn validate_estimate(estimate: Estimate) -> Result<(), String> {
-    let valid_estimate_values = vec![0, 1, 2, 3, 5, 8, 13, 20];
+    let valid_estimate_values = vec![0, 1, 2, 3, 5, 8, 13, 21];
     if !valid_estimate_values.contains(&estimate.value) {
         return Err(format!("{} is not a valid Estimate value", estimate.value))
+    }
+    if estimate.item.is_empty() {
+        return Err(format!("Estimate items must not be empty"))
     }
     Ok(())
 }
