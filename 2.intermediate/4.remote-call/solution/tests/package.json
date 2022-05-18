@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run build && npm run pack && TRYORAMA_LOG_LEVEL=info RUST_LOG=error WASM_LOG=warn RUST_BACKTRACE=1 TRYORAMA_HOLOCHAIN_PATH=\"holochain\" ts-node src/index.ts",
-    
-    "build": "cd ../zomes/exercise && cargo build --release --target wasm32-unknown-unknown",    "pack": "hc dna pack ../workdir"
+    "build": "cd ../zomes/exercise && cargo build --release --target wasm32-unknown-unknown", 
+    "pack": "hc dna pack ../workdir"
   },
   "author": "",
   "license": "ISC",
