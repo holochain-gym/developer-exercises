@@ -26,16 +26,13 @@ fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
             },
             entry,
         } => validate_entry_creation(header, entry),
-
         Op::StoreElement {
             element: Element {
                 entry: element_entry,
                 ..
             }
         } => validate_element_entry(element_entry),
-
         Op::RegisterAgentActivity {..} => Ok(ValidateCallbackResult::Valid),
-
         _ => Ok(ValidateCallbackResult::Invalid(format!(
             "Unsupported op: {:?}",
             op
@@ -60,14 +57,13 @@ fn validate_element_entry(element_entry: ElementEntry) -> ExternResult<ValidateC
 fn validate_entry_creation(header: EntryCreationHeader, entry: Entry) -> ExternResult<ValidateCallbackResult> {
     let app_entry_type = match header.app_entry_type() {
         Some(app_entry_type) => app_entry_type,
-        None => return Ok(ValidateCallbackResult::Invalid(format!(
-            "EntryCreationHeader is Missing app_entry_type: {:?}", header))),
+        None => return Ok(ValidateCallbackResult::Invalid("Missing app_entry_type".to_string())),
     };
     let this_zome = zome_info()?;
     if !this_zome.matches_entry_def_id(app_entry_type, Estimate::entry_def_id()) {
         return Ok(ValidateCallbackResult::Invalid(format!(
             "Unsupported entry type for creation: {:?}",
-            app_entry_type
+            header.entry_type()
         )))
     }
     validate_entry(entry)
@@ -82,20 +78,13 @@ fn validate_entry(entry: Entry) -> ExternResult<ValidateCallbackResult>  {
         _ => (),
     }
 
-    // Only if we pass all validation checks is the entry valid.
     Ok(ValidateCallbackResult::Valid)
 }
 
 /// Return true iff the estimate has a valid value
 pub fn validate_estimate(estimate: Estimate) -> Result<(), String> {
     let valid_estimate_values = vec![0, 1, 2, 3, 5, 8, 13, 21];
-    if !valid_estimate_values.contains(&estimate.value) {
-        return Err(format!("{} is not a valid Estimate value", estimate.value))
-    }
-    if estimate.item.is_empty() {
-        return Err(format!("Estimate items must not be empty"))
-    }
-    Ok(())
+    unimplemented!()
 }
 
 #[cfg(test)]
