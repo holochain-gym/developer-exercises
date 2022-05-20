@@ -43,7 +43,14 @@ fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
 fn validate_element_entry(element_entry: ElementEntry) -> ExternResult<ValidateCallbackResult> {
     match element_entry {
         ElementEntry::Present(entry) => validate_entry(entry),
-        _ => Ok(ValidateCallbackResult::Valid)
+        // If there is no element, then we have nothing to validate.
+        ElementEntry::NotApplicable => Ok(ValidateCallbackResult::Valid),
+        // It's good to be explicit about what is allowed on the chain and what is not.
+        // If you have a catch-all, often it's good to make this an invalid validation result
+        // so that you are explicit about what your chain accepts. If your chain accidentally
+        // rejects valid data, that would not be good, but it could be recovered with an update.
+        // If your chain accepts invalid data, that will be more difficult to remove later.
+        _ => Ok(ValidateCallbackResult::Invalid(format!("Unsupported element_entry {:?}", element_entry)))
     }
 }
 
@@ -76,7 +83,7 @@ fn validate_entry(entry: Entry) -> ExternResult<ValidateCallbackResult>  {
 
 /// Return true iff the estimate has a valid value
 pub fn validate_estimate(estimate: Estimate) -> Result<(), String> {
-    let valid_estimate_values = vec![0, 1, 2, 3, 5, 8, 13, 20];
+    let valid_estimate_values = vec![0, 1, 2, 3, 5, 8, 13, 21];
     unimplemented!()
 }
 
