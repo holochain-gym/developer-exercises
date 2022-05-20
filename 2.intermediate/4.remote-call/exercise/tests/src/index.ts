@@ -24,7 +24,11 @@ const orchestrator = new Orchestrator();
 orchestrator.registerScenario(
   "create posts p2p and retrieve them",
   async (s, t) => {
-    const [alice, bob, clare] = await s.players([conductorConfig, conductorConfig, conductorConfig]);
+    const [alice, bob, clare] = await s.players([
+      conductorConfig,
+      conductorConfig,
+      conductorConfig,
+    ]);
 
     // install your happs into the coductors and destructuring the returned happ data using the same
     // array structure as you created in your installation array.
@@ -32,21 +36,21 @@ orchestrator.registerScenario(
     const [[bob_common]] = await bob.installAgentsHapps(installation);
     const [[clare_common]] = await clare.installAgentsHapps(installation);
 
-    await s.shareAllNodes([alice, bob, clare])
+    await s.shareAllNodes([alice, bob, clare]);
 
     let capGrant = await alice_common.cells[0].call(
       "exercise",
-      "grant_p2p_message_cap",
+      "grant_peer_message_cap",
       {
         agent: bob_common.agent,
       }
     );
     console.log(capGrant);
     t.ok(capGrant);
-    
+
     let capGrantBob = await bob_common.cells[0].call(
       "exercise",
-      "grant_p2p_message_cap",
+      "grant_peer_message_cap",
       {
         agent: alice_common.agent,
       }
@@ -97,7 +101,7 @@ orchestrator.registerScenario(
     console.log(aliceMessages);
     t.ok(aliceMessages);
     t.equal(aliceMessages.length, 1);
-    
+
     // Check that clare cannot message alice since she does not have cap access
     try {
       await clare_common.cells[0].call(
@@ -110,7 +114,7 @@ orchestrator.registerScenario(
       );
       t.fail("The call should not have succeeded.");
     } catch (err) {
-      console.log({err});
+      console.log({ err });
       t.ok(err.data.data.includes("Unauthorized"));
     }
   }

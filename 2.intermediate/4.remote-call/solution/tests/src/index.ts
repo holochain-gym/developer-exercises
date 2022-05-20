@@ -36,7 +36,7 @@ orchestrator.registerScenario(
 
     let capGrant = await alice_common.cells[0].call(
       "exercise",
-      "grant_p2p_message_cap",
+      "grant_peer_message_cap",
       {
         agent: bob_common.agent,
       }
@@ -46,7 +46,7 @@ orchestrator.registerScenario(
     
     let capGrantBob = await bob_common.cells[0].call(
       "exercise",
-      "grant_p2p_message_cap",
+      "grant_peer_message_cap",
       {
         agent: alice_common.agent,
       }
