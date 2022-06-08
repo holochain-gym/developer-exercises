@@ -3,7 +3,7 @@ use hdk::prelude::*;
 
 entry_defs![Estimate::entry_def()];
 
-#[hdk_entry(id = "book")]
+#[hdk_entry(id = "estimate")]
 pub struct Estimate {
     item: String,
     value: u8,
@@ -16,53 +16,86 @@ fn add_estimate(external_estimate: Estimate) -> ExternResult<HeaderHashB64> {
 }
 
 #[hdk_extern]
-fn validate(validation_data: ValidateData) -> ExternResult<ValidateCallbackResult> {
-    let element: Element = validation_data.element;
-    let estimate_option: Option<Estimate> = element.entry().to_app_option()?;
-    match estimate_option {
-        None => {
-            return Ok(ValidateCallbackResult::Invalid(
-                "Empty estimate not allowed".to_string(),
-            ))
-        }
-        Some(x) => {
-            let e: Estimate = Some(x).unwrap();
-            let value: u8 = e.value;
-            if is_estimate_invalid(value) {
-                return Ok(ValidateCallbackResult::Invalid(
-                    "No a correct value".to_string(),
-                ));
+fn validate(op: Op) -> ExternResult<ValidateCallbackResult> {
+    match op {
+        Op::StoreEntry {
+            header: SignedHashed {
+                hashed: HoloHashed {
+                    content: header, ..
+                }, ..
+            },
+            entry,
+        } => validate_entry_creation(header, entry),
+
+        Op::StoreElement {
+            element: Element {
+                entry: element_entry,
+                ..
             }
-            return Ok(ValidateCallbackResult::Valid);
-        }
-    };
+        } => validate_element_entry(element_entry),
+
+        Op::RegisterAgentActivity {..} => Ok(ValidateCallbackResult::Valid),
+
+        _ => Ok(ValidateCallbackResult::Invalid(format!(
+            "Unsupported op: {:?}",
+            op
+        ))),
+    }
 }
 
-pub fn is_estimate_invalid(input: u8) -> bool {
-    let allowed_estimates: Vec<u8> = vec![0, 1, 2, 3, 5, 8, 13, 20];
-    let estimate: Estimate = Estimate {
-        item: "workitem".into(),
-        value: input,
+fn validate_element_entry(element_entry: ElementEntry) -> ExternResult<ValidateCallbackResult> {
+    match element_entry {
+        ElementEntry::Present(entry) => validate_entry(entry),
+        // If there is no element, then we have nothing to validate.
+        ElementEntry::NotApplicable => Ok(ValidateCallbackResult::Valid),
+        // It's good to be explicit about what is allowed on the chain and what is not.
+        // If you have a catch-all, often it's good to make this an invalid validation result
+        // so that you are explicit about what your chain accepts. If your chain accidentally
+        // rejects valid data, that would not be good, but it could be recovered with an update.
+        // If your chain accepts invalid data, that will be more difficult to remove later.
+        _ => Ok(ValidateCallbackResult::Invalid(format!("Unsupported element_entry {:?}", element_entry)))
+    }
+}
+
+fn validate_entry_creation(header: EntryCreationHeader, entry: Entry) -> ExternResult<ValidateCallbackResult> {
+    let app_entry_type = match header.app_entry_type() {
+        Some(app_entry_type) => app_entry_type,
+        None => return Ok(ValidateCallbackResult::Invalid(format!(
+            "EntryCreationHeader is Missing app_entry_type: {:?}", header))),
     };
-    let estimate_option: Option<Estimate> = Some(estimate);
-    println!("here");
-    match estimate_option {
-        Some(x) => {
-            println!("some");
-            let e: Estimate = Some(x).unwrap();
-            let value: u8 = e.value;
-            for i in &allowed_estimates {
-                if *i == value {
-                    return false;
-                }
-            }
-            return true;
-        }
-        None => {
-            println!("none");
-            return true;
-        }
-    };
+    let this_zome = zome_info()?;
+    if !this_zome.matches_entry_def_id(app_entry_type, Estimate::entry_def_id()) {
+        return Ok(ValidateCallbackResult::Invalid(format!(
+            "Unsupported entry type for creation: {:?}",
+            app_entry_type
+        )))
+    }
+    validate_entry(entry)
+}
+
+fn validate_entry(entry: Entry) -> ExternResult<ValidateCallbackResult>  {
+    let estimate = Estimate::try_from(&entry)?;
+    match validate_estimate(estimate) {
+        Err(message) => return Ok(ValidateCallbackResult::Invalid(
+            format!("Estimate was invalid: {}", message),
+        )),
+        _ => (),
+    }
+
+    // Only if we pass all validation checks is the entry valid.
+    Ok(ValidateCallbackResult::Valid)
+}
+
+/// Return true iff the estimate has a valid value
+pub fn validate_estimate(estimate: Estimate) -> Result<(), String> {
+    let valid_estimate_values = vec![0, 1, 2, 3, 5, 8, 13, 21];
+    if !valid_estimate_values.contains(&estimate.value) {
+        return Err(format!("{} is not a valid Estimate value", estimate.value))
+    }
+    if estimate.item.is_empty() {
+        return Err(format!("Estimate items must not be empty"))
+    }
+    Ok(())
 }
 
 #[cfg(test)]
@@ -70,11 +103,16 @@ mod tests {
 
     #[test]
     fn test_invalid_true() {
-        assert_eq!(super::is_estimate_invalid(6), true);
+        let estimate = crate::Estimate { item: "task".to_string(), value: 6 };
+        assert_eq!(crate::validate_estimate(estimate), Ok(()));
     }
 
     #[test]
     fn test_invalid_false() {
-        assert_eq!(super::is_estimate_invalid(8), false);
+        let estimate = crate::Estimate { item: "task".to_string(), value: 8 };
+        assert_eq!(match crate::validate_estimate(estimate) {
+            Err(_) => false,
+            _ => true,
+        }, false);
     }
 }

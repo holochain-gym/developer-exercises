@@ -7,7 +7,7 @@ for D in *; do
     if [ -d "${D}" ]; then
         if [ -d "${D}/solution/tests" ]; then
             echo Testing ${D}
-            cd ${D}/solution/tests && npm install && npm test
+            cd ${D}/solution/tests && npm test
             cd ../../..
         fi
     fi
@@ -19,7 +19,7 @@ for D in *; do
     if [ -d "${D}" ]; then
         if [ -d "${D}/solution/tests" ]; then
             echo Testing ${D}
-            cd ${D}/solution/tests && npm install && npm test
+            cd ${D}/solution/tests && npm test
             cd ../../..
         fi
     fi

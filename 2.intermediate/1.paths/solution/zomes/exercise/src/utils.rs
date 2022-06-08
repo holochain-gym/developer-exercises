@@ -36,11 +36,11 @@ pub fn get_posts_by_hour(
 ) -> ExternResult<Vec<Post>> {
     let path = Path::from(format!("all_posts.{}-{}-{}.{}", year, month, day, hour));
 
-    let links = get_links(path.hash()?, None)?;
+    let links = get_links(path.path_entry_hash()?.into(), None)?;
 
     let posts: Vec<Post> = links
         .into_iter()
-        .map(|link| get_post_by_hash(link.target))
+        .map(|link| get_post_by_hash(link.target.into()))
         .collect::<ExternResult<Vec<Post>>>()?;
 
     Ok(posts)
@@ -59,10 +59,9 @@ pub fn err(reason: &str) -> WasmError {
 }
 
 pub fn get_last_component_string(path_tag: LinkTag) -> ExternResult<String> {
-    let hour_path = Path::try_from(&path_tag)?;
-    let hour_components: Vec<Component> = hour_path.into();
+    let bytes = SerializedBytes::from(UnsafeBytes::from(path_tag.0));
 
-    let hour_bytes: &Component = hour_components.last().ok_or(err("Invalid path"))?;
+    let hour_bytes = &Component::try_from(bytes)?;
     let hour_str: String = hour_bytes.try_into()?;
 
     Ok(hour_str)

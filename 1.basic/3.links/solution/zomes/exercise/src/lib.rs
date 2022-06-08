@@ -18,6 +18,16 @@ pub struct CreatePostInput {
     content: String,
 }
 
+pub enum PostsLinkType {
+    AgentToPost = 1,
+}
+
+impl Into<LinkType> for PostsLinkType {
+    fn into(self) -> LinkType {
+        LinkType::new(self as u8)
+    }
+}
+
 //  3. create_post()
 //      Create an entry from input data. Then, pass the EntryHash of the data
 //      to the link creation call, where the base of the link is the agent public key.
@@ -32,7 +42,8 @@ pub fn create_post(external_data: CreatePostInput) -> ExternResult<EntryHash> {
 
     create_link(
         agent_info()?.agent_latest_pubkey.into(),
-        post_entry_hash.clone(),
+        post_entry_hash.clone().into(),
+        PostsLinkType::AgentToPost,
         (),
     )?;
 

@@ -36,9 +36,8 @@ orchestrator.registerScenario(
 
     let capGrant = await alice_common.cells[0].call(
       "exercise",
-      "create_cap_access",
+      "grant_peer_message_cap",
       {
-        function: "receive_p2p_message",
         agent: bob_common.agent,
       }
     );
@@ -47,9 +46,8 @@ orchestrator.registerScenario(
     
     let capGrantBob = await bob_common.cells[0].call(
       "exercise",
-      "create_cap_access",
+      "grant_peer_message_cap",
       {
-        function: "receive_p2p_message",
         agent: alice_common.agent,
       }
     );
@@ -59,9 +57,9 @@ orchestrator.registerScenario(
     //Create p2p post to bob
     let p2pPost2Bob = await alice_common.cells[0].call(
       "exercise",
-      "create_post",
+      "send_message",
       {
-        content: "Hey Bob!",
+        message: "Hey Bob!",
         target_agent: bob_common.agent,
       }
     );
@@ -71,7 +69,7 @@ orchestrator.registerScenario(
     //Check that bob has the p2p post
     let bobMessages = await bob_common.cells[0].call(
       "exercise",
-      "get_my_posts",
+      "get_messages",
       null
     );
     console.log(bobMessages);
@@ -81,9 +79,9 @@ orchestrator.registerScenario(
     //Create p2p post to alice
     let p2pPost2Alice = await bob_common.cells[0].call(
       "exercise",
-      "create_post",
+      "send_message",
       {
-        content: "Hey Alice!",
+        message: "Hey Alice!",
         target_agent: alice_common.agent,
       }
     );
@@ -93,26 +91,28 @@ orchestrator.registerScenario(
     //Check that alice has the p2p post
     let aliceMessages = await alice_common.cells[0].call(
       "exercise",
-      "get_my_posts",
+      "get_messages",
       null
     );
     console.log(aliceMessages);
     t.ok(aliceMessages);
     t.equal(aliceMessages.length, 1);
     
-    //Check that clare cannot message alice since she does not have cap access
-        // TODO add test that validates if the async function throws error
-        // -- commenting this out to make the CI build pass
-    // let p2pPost2Alice2 = await clare_common.cells[0].call(
-    //   "exercise",
-    //   "create_post",
-    //   {
-    //     content: "Hey Alice!",
-    //     target_agent: alice_common.agent,
-    //   }
-    // );
-    // console.log(p2pPost2Alice2);
-    // t.equal(p2pPost2Alice2.Err)
+    // Check that clare cannot message alice since she does not have cap access
+    try {
+      await clare_common.cells[0].call(
+        "exercise",
+        "send_unauthorized_message",
+        {
+          message: "Hey Alice!",
+          target_agent: alice_common.agent,
+        }
+      );
+      t.fail("The call should not have succeeded.");
+    } catch (err) {
+      console.log({err});
+      t.ok(err.data.data.includes("Unauthorized"));
+    }
   }
 );
 

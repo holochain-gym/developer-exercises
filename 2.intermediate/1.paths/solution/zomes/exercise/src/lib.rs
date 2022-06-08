@@ -4,10 +4,21 @@ use hdk::prelude::*;
 mod utils;
 use utils::*;
 
-entry_defs![Path::entry_def(), Post::entry_def()];
+entry_defs![PathEntry::entry_def(), Post::entry_def()];
 
 #[hdk_entry(id = "post")]
 pub struct Post(String);
+
+pub enum PostsLinkType {
+    TimePathToPost = 1,
+    TagPathToPost = 2,
+}
+
+impl Into<LinkType> for PostsLinkType {
+    fn into(self) -> LinkType {
+        LinkType::new(self as u8)
+    }
+}
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct CreateTaskInput {
@@ -33,14 +44,24 @@ pub fn create_post(task_input: CreateTaskInput) -> ExternResult<EntryHash> {
 
     time_path.ensure()?;
 
-    create_link(time_path.hash()?, post_hash.clone(), ())?;
+    create_link(
+        time_path.path_entry_hash()?.into(),
+        post_hash.clone().into(),
+        PostsLinkType::TimePathToPost,
+        (),
+    )?;
 
     for tag in task_input.tags {
         let tags_path = Path::from(format!("all_tags.{}", tag));
 
         tags_path.ensure()?;
 
-        create_link(tags_path.hash()?, post_hash.clone(), ())?;
+        create_link(
+            tags_path.path_entry_hash()?.into(),
+            post_hash.clone().into(),
+            PostsLinkType::TagPathToPost,
+            (),
+        )?;
     }
 
     Ok(post_hash)
@@ -81,11 +102,11 @@ pub fn get_all_tags(_: ()) -> ExternResult<Vec<String>> {
 pub fn get_posts_by_tag(tag: String) -> ExternResult<Vec<Post>> {
     let path = Path::from(format!("all_tags.{}", tag));
 
-    let links = get_links(path.hash()?, None)?;
+    let links = get_links(path.path_entry_hash()?.into(), None)?;
 
     let posts: Vec<Post> = links
         .into_iter()
-        .map(|link| get_post_by_hash(link.target))
+        .map(|link| get_post_by_hash(link.target.into()))
         .collect::<ExternResult<Vec<Post>>>()?;
 
     Ok(posts)
